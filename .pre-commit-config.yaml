@@ -9,7 +9,7 @@ repos:
           - id: black
             language_version: python3.7
     - repo: https://github.com/timothycrosley/isort
-      rev: 5.3.2
+      rev: 5.4.0
       hooks:
           - id: isort
     - repo: https://gitlab.com/pycqa/flake8
