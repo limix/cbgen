@@ -1,5 +1,6 @@
 from importlib import import_module as _import_module
 
+from ._bgen_file import bgen_file
 from ._testit import test
 
 try:
@@ -21,5 +22,6 @@ except ModuleNotFoundError:
 
 __all__ = [
     "__version__",
+    "bgen_file",
     "test",
 ]

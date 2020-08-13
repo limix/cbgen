@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cp /c/Windows/system32/athr.dll bgen/
+cp /c/Windows/system32/bgen.dll bgen/
+cp /c/Windows/system32/zlib.dll bgen/
+cp /c/Windows/system32/libzstd.dll bgen/

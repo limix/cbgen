@@ -8,6 +8,8 @@ from pandas import Series
 from ._ffi import ffi, lib
 from ._typing import CData, Genotype
 
+__all__ = ["bgen_file"]
+
 
 class bgen_file:
     def __init__(self, filepath: Union[str, Path]):
