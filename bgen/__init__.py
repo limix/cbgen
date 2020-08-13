@@ -1,4 +1,5 @@
 from importlib import import_module as _import_module
+from ._testit import test
 
 try:
     from ._ffi import ffi
@@ -19,4 +20,5 @@ except ModuleNotFoundError:
 
 __all__ = [
     "__version__",
+    "test",
 ]
