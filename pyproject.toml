@@ -1,6 +1,11 @@
 [build-system]
-requires = ["setuptools>=49.3.0", "wheel>=0.34.2", "cffi>=1.14.1"]
+requires = ["setuptools>=49.3.0", "wheel>=0.34.2", "cffi>=1.14.1",
+    "setuptools_scm[toml]>=4.1.2",
+    "pytest-runner>=5.2"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+write_to = "bgen/_version.py"
 
 [tool.isort]
 profile = "black"
