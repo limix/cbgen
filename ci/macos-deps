@@ -4,7 +4,7 @@ curl https://raw.githubusercontent.com/horta/zstd.install/master/install --outpu
 bash install-zstd
 
 python3 -m pip install cmake
-python3 -m pip install numpy pandas --prefer-binary
+python3 -m pip install numpy --prefer-binary
 
 curl -fsSL https://git.io/JerYI | GITHUB_USER=horta GITHUB_PROJECT=almosthere bash
 curl -fsSL https://git.io/JerYI | GITHUB_USER=limix GITHUB_PROJECT=bgen bash
