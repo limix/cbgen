@@ -1,6 +1,6 @@
 from collections import OrderedDict
 from dataclasses import dataclass
-from typing import Any, NamedTuple
+from typing import Any
 
 from pandas import DataFrame
 
@@ -12,22 +12,18 @@ CData = Any
 # Waiting for numpy release: https://github.com/numpy/numpy/labels/static%20typing
 DtypeLike = Any
 
-Genotype = NamedTuple(
-    "Genotype",
-    [
-        ("probs", DtypeLike),
-        ("phased", DtypeLike),
-        ("ploidy", DtypeLike),
-        ("missing", DtypeLike),
-    ],
-)
+
+@dataclass
+class Genotype:
+    probs: DtypeLike
+    phased: DtypeLike
+    ploidy: DtypeLike
+    missing: DtypeLike
 
 
 @dataclass
-class Partition:
-    index_offset: int
-    nvariants: int
-    vid: DtypeLike
+class Variants:
+    id: DtypeLike
     rsid: DtypeLike
     chrom: DtypeLike
     position: DtypeLike
@@ -35,19 +31,29 @@ class Partition:
     allele_ids: DtypeLike
     offset: DtypeLike
 
+    def __len__(self) -> int:
+        return self.id.shape[0]
+
+
+@dataclass
+class Partition:
+    partition_offset: int
+    variants: Variants
+
     def as_dataframe(self) -> DataFrame:
+        v = self.variants
         data = OrderedDict(
             [
-                ("id", self.vid.astype(str)),
-                ("rsid", self.rsid.astype(str)),
-                ("chrom", self.chrom.astype(str)),
-                ("pos", self.position),
-                ("nalleles", self.nalleles),
-                ("allele_ids", self.allele_ids.astype(str)),
-                ("vaddr", self.offset),
+                ("id", v.id.astype(str)),
+                ("rsid", v.rsid.astype(str)),
+                ("chrom", v.chrom.astype(str)),
+                ("pos", v.position),
+                ("nalleles", v.nalleles),
+                ("allele_ids", v.allele_ids.astype(str)),
+                ("vaddr", v.offset),
             ]
         )
 
         df = DataFrame(data)
-        df.index = range(self.index_offset, self.index_offset + self.nvariants)
+        df.index = range(self.partition_offset, self.partition_offset + len(v))
         return df

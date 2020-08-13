@@ -4,7 +4,7 @@ from typing import Union
 from numpy import empty, uint16, uint32, uint64, zeros
 
 from ._ffi import ffi, lib
-from ._typing import CData, Partition
+from ._typing import CData, Partition, Variants
 
 
 class bgen_metafile:
@@ -40,7 +40,7 @@ class bgen_metafile:
 
         position = empty(nvariants, dtype=uint32)
         nalleles = empty(nvariants, dtype=uint16)
-        offset = empty(nvariants, dtype=uint64)
+        var_offset = empty(nvariants, dtype=uint64)
         vid_max_len = ffi.new("uint32_t[]", 1)
         rsid_max_len = ffi.new("uint32_t[]", 1)
         chrom_max_len = ffi.new("uint32_t[]", 1)
@@ -48,7 +48,7 @@ class bgen_metafile:
 
         position_ptr = ffi.cast("uint32_t *", ffi.from_buffer(position))
         nalleles_ptr = ffi.cast("uint16_t *", ffi.from_buffer(nalleles))
-        offset_ptr = ffi.cast("uint64_t *", ffi.from_buffer(offset))
+        offset_ptr = ffi.cast("uint64_t *", ffi.from_buffer(var_offset))
         lib.read_partition_part1(
             partition,
             position_ptr,
@@ -78,18 +78,9 @@ class bgen_metafile:
         )
         lib.bgen_partition_destroy(partition)
 
-        index_offset = self.partition_size * index
-        return Partition(
-            index_offset,
-            nvariants,
-            vid,
-            rsid,
-            chrom,
-            position,
-            nalleles,
-            allele_ids,
-            offset,
-        )
+        part_offset = self.partition_size * index
+        v = Variants(vid, rsid, chrom, position, nalleles, allele_ids, var_offset)
+        return Partition(part_offset, v)
 
     def close(self):
         if self._bgen_metafile != ffi.NULL:
