@@ -3,10 +3,9 @@ from pathlib import Path
 from typing import Union
 
 from numpy import float64, full, nan, uint8, zeros
-from pandas import Series
 
 from ._ffi import ffi, lib
-from ._typing import CData, Genotype
+from ._typing import CData, DtypeLike, Genotype
 
 __all__ = ["bgen_file"]
 
@@ -35,7 +34,7 @@ class bgen_file:
     def contain_samples(self) -> bool:
         return lib.bgen_file_contain_samples(self._bgen_file)
 
-    def read_samples(self) -> Series:
+    def read_samples(self) -> DtypeLike:
         nsamples = self.nsamples
         bgen_samples: CData = lib.bgen_file_read_samples(self._bgen_file)
         if bgen_samples == ffi.NULL:
@@ -54,7 +53,7 @@ class bgen_file:
         finally:
             lib.bgen_samples_destroy(bgen_samples)
 
-        return Series(samples, dtype=str, name="id")
+        return samples
 
     def create_metafile(self, filepath: Union[str, Path], verbose=True):
         n = _estimate_best_npartitions(self.nvariants)

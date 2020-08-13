@@ -1,8 +1,5 @@
-from collections import OrderedDict
 from dataclasses import dataclass
 from typing import Any
-
-from pandas import DataFrame
 
 __all__ = ["CData", "DtypeLike", "Genotype", "Partition"]
 
@@ -37,23 +34,5 @@ class Variants:
 
 @dataclass
 class Partition:
-    partition_offset: int
+    offset: int
     variants: Variants
-
-    def as_dataframe(self) -> DataFrame:
-        v = self.variants
-        data = OrderedDict(
-            [
-                ("id", v.id.astype(str)),
-                ("rsid", v.rsid.astype(str)),
-                ("chrom", v.chrom.astype(str)),
-                ("pos", v.position),
-                ("nalleles", v.nalleles),
-                ("allele_ids", v.allele_ids.astype(str)),
-                ("vaddr", v.offset),
-            ]
-        )
-
-        df = DataFrame(data)
-        df.index = range(self.partition_offset, self.partition_offset + len(v))
-        return df
