@@ -1,4 +1,5 @@
 from importlib import import_module as _import_module
+
 from ._testit import test
 
 try:
@@ -14,7 +15,7 @@ and reinstall the package again."""
     raise RuntimeError(str(e) + _ffi_err)
 
 try:
-    __version__ = getattr(_import_module("iseq_prof._version"), "version", "x.x.x")
+    __version__ = getattr(_import_module("bgen._version"), "version", "x.x.x")
 except ModuleNotFoundError:
     __version__ = "x.x.x"
 
