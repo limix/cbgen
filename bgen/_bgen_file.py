@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from math import floor, sqrt
 from pathlib import Path
 from typing import Union
@@ -56,7 +58,7 @@ class bgen_file:
         return samples
 
     def create_metafile(self, filepath: Union[str, Path], verbose=True):
-        n = _estimate_best_npartitions(self.nvariants)
+        n = estimate_best_npartitions(self.nvariants)
         filepath = Path(filepath)
 
         mf = lib.bgen_metafile_create(self._bgen_file, bytes(filepath), n, verbose)
@@ -94,14 +96,14 @@ class bgen_file:
         if self._bgen_file != ffi.NULL:
             lib.bgen_file_close(self._bgen_file)
 
-    def __enter__(self):
+    def __enter__(self) -> bgen_file:
         return self
 
     def __exit__(self, *_):
         self.close()
 
 
-def _estimate_best_npartitions(nvariants: int) -> int:
+def estimate_best_npartitions(nvariants: int) -> int:
     min_variants = 128
     m = max(min(min_variants, nvariants), floor(sqrt(nvariants)))
     return nvariants // m

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from pathlib import Path
 from typing import Union
 
@@ -5,6 +7,8 @@ from numpy import empty, uint16, uint32, uint64, zeros
 
 from ._ffi import ffi, lib
 from ._typing import CData, Partition, Variants
+
+__all__ = ["bgen_metafile"]
 
 
 class bgen_metafile:
@@ -29,7 +33,7 @@ class bgen_metafile:
 
     @property
     def partition_size(self) -> int:
-        return _ceildiv(self.nvariants, self.npartitions)
+        return ceildiv(self.nvariants, self.npartitions)
 
     def read_partition(self, index: int) -> Partition:
         partition = lib.bgen_metafile_read_partition(self._bgen_metafile, index)
@@ -86,12 +90,12 @@ class bgen_metafile:
         if self._bgen_metafile != ffi.NULL:
             lib.bgen_metafile_close(self._bgen_metafile)
 
-    def __enter__(self):
+    def __enter__(self) -> bgen_metafile:
         return self
 
     def __exit__(self, *_):
         self.close()
 
 
-def _ceildiv(a, b) -> int:
+def ceildiv(a, b) -> int:
     return -(-a // b)

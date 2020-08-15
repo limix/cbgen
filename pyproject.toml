@@ -11,8 +11,10 @@ write_to = "bgen/_version.py"
 profile = "black"
 src_paths = ["bgen"]
 known_third_party = [
+    "appdirs",
     "cffi",
+    "numpy",
+    "pooch",
     "pytest",
     "pytest-runner",
-    "numpy",
 ]
