@@ -2,9 +2,13 @@ import pytest
 
 
 def pytest_addoption(parser):
-    parser.addoption(
-        "--runslow", action="store_true", default=False, help="run slow tests"
-    )
+    try:
+        parser.addoption(
+            "--runslow", action="store_true", default=False, help="run slow tests"
+        )
+    except ValueError:
+        # It might have already been added
+        pass
 
 
 def pytest_configure(config):
