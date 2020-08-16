@@ -19,7 +19,7 @@ and reinstall the package again."""
     raise RuntimeError(str(e) + _ffi_err)
 
 try:
-    __version__ = getattr(_import_module("bgen._version"), "version", "x.x.x")
+    __version__ = getattr(_import_module("cbgen._version"), "version", "x.x.x")
 except ModuleNotFoundError:
     __version__ = "x.x.x"
 

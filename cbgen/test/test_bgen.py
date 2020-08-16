@@ -4,11 +4,11 @@ import pytest
 from numpy import isnan, nan, nansum
 from numpy.testing import assert_allclose, assert_array_equal
 
-from bgen import bgen_file, bgen_metafile, example
+from cbgen import bgen_file, bgen_metafile, example
 
 
 @pytest.mark.slow
-def test_bgen_large1(tmp_path):
+def test_cbgen_large1(tmp_path):
     filepath = example.get("merged_487400x220000.bgen")
     mfilepath = tmp_path / f"{filepath.name}.metafile"
 
@@ -51,7 +51,7 @@ def test_bgen_large1(tmp_path):
     bgen.close()
 
 
-def test_bgen_invalid_metafile():
+def test_cbgen_invalid_metafile():
     mfilepath = example.get("wrong.metadata")
     with pytest.raises(RuntimeError):
         bgen_metafile(mfilepath)
@@ -61,7 +61,7 @@ def test_bgen_invalid_metafile():
         bgen_metafile(mfilepath)
 
 
-def test_bgen_phased_genotype(tmp_path):
+def test_cbgen_phased_genotype(tmp_path):
     filepath = example.get("haplotypes.bgen")
     mfilepath = tmp_path / f"{filepath.name}.metafile"
 
@@ -130,7 +130,7 @@ def test_bgen_phased_genotype(tmp_path):
     bgen.close()
 
 
-def test_bgen_complex_unphased(tmp_path: Path):
+def test_cbgen_complex_unphased(tmp_path: Path):
     filepath = example.get("complex.23bits.no.samples.bgen")
     mfilepath = tmp_path / f"{filepath.name}.metafile"
     with bgen_file(filepath) as bgen:

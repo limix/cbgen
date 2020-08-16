@@ -5,11 +5,11 @@ requires = ["setuptools>=49.3.0", "wheel>=0.34.2", "cffi>=1.14.1",
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools_scm]
-write_to = "bgen/_version.py"
+write_to = "cbgen/_version.py"
 
 [tool.isort]
 profile = "black"
-src_paths = ["bgen"]
+src_paths = ["cbgen"]
 known_third_party = [
     "appdirs",
     "cffi",

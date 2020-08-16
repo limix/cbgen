@@ -15,25 +15,25 @@ else:
 
 folder = os.path.dirname(os.path.abspath(__file__))
 
-with open(join(folder, "bgen", "interface.h"), "r") as f:
+with open(join(folder, "cbgen", "interface.h"), "r") as f:
     ffibuilder.cdef(f.read())
 
-with open(join(folder, "bgen", "genotype.h"), "r") as f:
+with open(join(folder, "cbgen", "genotype.h"), "r") as f:
     ffibuilder.cdef(f.read())
 
-with open(join(folder, "bgen", "genotype.c"), "r") as f:
+with open(join(folder, "cbgen", "genotype.c"), "r") as f:
     genotype_c = f.read()
 
-with open(join(folder, "bgen", "partition.h"), "r") as f:
+with open(join(folder, "cbgen", "partition.h"), "r") as f:
     ffibuilder.cdef(f.read())
 
-with open(join(folder, "bgen", "partition.c"), "r") as f:
+with open(join(folder, "cbgen", "partition.c"), "r") as f:
     partition_c = f.read()
 
-with open(join(folder, "bgen", "samples.h"), "r") as f:
+with open(join(folder, "cbgen", "samples.h"), "r") as f:
     ffibuilder.cdef(f.read())
 
-with open(join(folder, "bgen", "samples.c"), "r") as f:
+with open(join(folder, "cbgen", "samples.c"), "r") as f:
     samples_c = f.read()
 
 extra_link_args: List[str] = []
@@ -41,7 +41,7 @@ if "BGEN_EXTRA_LINK_ARGS" in os.environ:
     extra_link_args += os.environ["BGEN_EXTRA_LINK_ARGS"].split(os.pathsep)
 
 ffibuilder.set_source(
-    "bgen._ffi",
+    "cbgen._ffi",
     fr"""
     #include "bgen/bgen.h"
     {genotype_c}
