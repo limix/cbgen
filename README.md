@@ -1,3 +1,3 @@
-# bgen-py
+# cbgen-py
 
-Python wrapper around [bgen](https://github.com/limix/bgen) library.
+Python wrapper around [bgen](https://github.com/limix/bgen) C library.
