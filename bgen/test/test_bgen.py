@@ -1,10 +1,54 @@
 from pathlib import Path
 
 import pytest
-from numpy import nan
+from numpy import isnan, nan, nansum
 from numpy.testing import assert_allclose, assert_array_equal
 
 from bgen import bgen_file, bgen_metafile, example
+
+
+@pytest.mark.slow
+def test_bgen_large1(tmp_path):
+    filepath = example.get("merged_487400x220000.bgen")
+    mfilepath = tmp_path / f"{filepath.name}.metafile"
+
+    bgen = bgen_file(filepath)
+    assert bgen.nvariants == 220000
+    assert bgen.nsamples == 487400
+    assert not bgen.contain_samples
+
+    with pytest.raises(RuntimeError):
+        bgen.read_samples()
+
+    bgen.create_metafile(mfilepath, verbose=True)
+
+    mf = bgen_metafile(mfilepath)
+
+    assert mf.filepath.name == mfilepath.name
+    assert mf.npartitions == 469
+    assert mf.nvariants == 220000
+    assert mf.partition_size == 470
+
+    part = mf.read_partition(5)
+
+    assert len(part.variants) == 470
+    assert part.variants.id[0] == b"sid_1_2350"
+    assert part.variants.rsid[0] == b"sid_1_2350"
+    assert part.variants.chrom[0] == b"1"
+    assert part.variants.position[0] == 2351
+    assert part.variants.nalleles[0] == 2
+    assert part.variants.allele_ids[0] == b"A,C"
+    voff = part.variants.offset[0]
+    gt = bgen.read_genotype(voff)
+    assert_allclose(gt.probs.shape, (487400, 3))
+    assert_allclose(nansum(gt.probs, 0), [475743.0, 0.0, 0.0])
+    assert_allclose(isnan(gt.probs).sum(0), [11657, 11657, 11657])
+    assert not gt.phased
+    assert_allclose(gt.ploidy.sum(), 974800)
+    assert_allclose(gt.missing.sum(), 11657)
+
+    mf.close()
+    bgen.close()
 
 
 def test_bgen_invalid_metafile():
