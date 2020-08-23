@@ -28,7 +28,8 @@ class Variants:
     allele_ids: DtypeLike
     offset: DtypeLike
 
-    def __len__(self) -> int:
+    @property
+    def size(self) -> int:
         return self.id.shape[0]
 
 

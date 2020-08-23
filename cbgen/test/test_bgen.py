@@ -31,7 +31,7 @@ def test_cbgen_large1(tmp_path):
 
     part = mf.read_partition(5)
 
-    assert len(part.variants) == 470
+    assert part.variants.size == 470
     assert part.variants.id[0] == b"sid_1_2350"
     assert part.variants.rsid[0] == b"sid_1_2350"
     assert part.variants.chrom[0] == b"1"
@@ -49,6 +49,21 @@ def test_cbgen_large1(tmp_path):
 
     mf.close()
     bgen.close()
+
+
+def test_cbgen_nonexistent_bgen_file():
+    with pytest.raises(RuntimeError):
+        bgen_file("/Fmw/DiKel")
+
+
+def test_cbgen_error_create_metafile():
+    filepath = example.get("haplotypes.bgen")
+    mfilepath = "/DmEkq/WkhDu/bla.metafile"
+
+    bgen = bgen_file(filepath)
+
+    with pytest.raises(RuntimeError):
+        bgen.create_metafile(mfilepath, verbose=False)
 
 
 def test_cbgen_invalid_metafile():
@@ -84,6 +99,7 @@ def test_cbgen_phased_genotype(tmp_path):
 
     part = mf.read_partition(0)
 
+    assert part.variants.size == 4
     assert part.variants.id[0] == b"SNP1"
     assert part.variants.rsid[0] == b"RS1"
     assert part.variants.chrom[0] == b"1"
