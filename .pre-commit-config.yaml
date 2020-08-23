@@ -1,6 +1,6 @@
 repos:
     - repo: https://github.com/myint/autoflake
-      rev: master
+      rev: v1.4
       hooks:
           - id: autoflake
     - repo: https://github.com/ambv/black
@@ -9,7 +9,7 @@ repos:
           - id: black
             language_version: python3.7
     - repo: https://github.com/timothycrosley/isort
-      rev: 5.4.0
+      rev: 5.4.2
       hooks:
           - id: isort
     - repo: https://gitlab.com/pycqa/flake8
