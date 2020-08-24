@@ -34,15 +34,15 @@ def test_cbgen_large1(tmp_path):
     assert part.variants.size == 470
     assert part.variants.id[0] == b"sid_1_2350"
     assert part.variants.rsid[0] == b"sid_1_2350"
-    assert part.variants.chrom[0] == b"1"
+    assert part.variants.chromosome[0] == b"1"
     assert part.variants.position[0] == 2351
     assert part.variants.nalleles[0] == 2
     assert part.variants.allele_ids[0] == b"A,C"
     voff = part.variants.offset[0]
     gt = bgen.read_genotype(voff)
-    assert_allclose(gt.probs.shape, (487400, 3))
-    assert_allclose(nansum(gt.probs, 0), [475743.0, 0.0, 0.0])
-    assert_allclose(isnan(gt.probs).sum(0), [11657, 11657, 11657])
+    assert_allclose(gt.probability.shape, (487400, 3))
+    assert_allclose(nansum(gt.probability, 0), [475743.0, 0.0, 0.0])
+    assert_allclose(isnan(gt.probability).sum(0), [11657, 11657, 11657])
     assert not gt.phased
     assert_allclose(gt.ploidy.sum(), 974800)
     assert_allclose(gt.missing.sum(), 11657)
@@ -102,14 +102,14 @@ def test_cbgen_phased_genotype(tmp_path):
     assert part.variants.size == 4
     assert part.variants.id[0] == b"SNP1"
     assert part.variants.rsid[0] == b"RS1"
-    assert part.variants.chrom[0] == b"1"
+    assert part.variants.chromosome[0] == b"1"
     assert part.variants.position[0] == 1
     assert part.variants.nalleles[0] == 2
     assert part.variants.allele_ids[0] == b"A,G"
     voff = part.variants.offset[0]
     gt = bgen.read_genotype(voff)
     assert_allclose(
-        gt.probs,
+        gt.probability,
         [
             [1.0, 0.0, 1.0, 0.0],
             [0.0, 1.0, 1.0, 0.0],
@@ -123,14 +123,14 @@ def test_cbgen_phased_genotype(tmp_path):
 
     assert part.variants.id[3] == b"SNP4"
     assert part.variants.rsid[3] == b"RS4"
-    assert part.variants.chrom[3] == b"1"
+    assert part.variants.chromosome[3] == b"1"
     assert part.variants.position[3] == 4
     assert part.variants.nalleles[3] == 2
     assert part.variants.allele_ids[3] == b"A,G"
     voff = part.variants.offset[3]
     gt = bgen.read_genotype(voff)
     assert_allclose(
-        gt.probs,
+        gt.probability,
         [
             [0.0, 1.0, 0.0, 1.0],
             [1.0, 0.0, 1.0, 0.0],
@@ -168,7 +168,7 @@ def test_cbgen_complex_unphased(tmp_path: Path):
 
         assert part.variants.id[0] == b""
         assert part.variants.rsid[0] == b"V1"
-        assert part.variants.chrom[0] == b"01"
+        assert part.variants.chromosome[0] == b"01"
         assert part.variants.position[0] == 1
         assert part.variants.nalleles[0] == 2
         assert part.variants.allele_ids[0] == b"A,G"
@@ -177,7 +177,7 @@ def test_cbgen_complex_unphased(tmp_path: Path):
             voff = part.variants.offset[0]
             gt = bgen.read_genotype(voff)
             assert_allclose(
-                gt.probs,
+                gt.probability,
                 [[1.0, 0.0, nan], [1.0, 0.0, 0.0], [1.0, 0.0, 0.0], [0.0, 1.0, 0.0]],
             )
             assert not gt.phased
@@ -187,7 +187,7 @@ def test_cbgen_complex_unphased(tmp_path: Path):
             voff = part.variants.offset[-1]
             gt = bgen.read_genotype(voff)
             assert_allclose(
-                gt.probs,
+                gt.probability,
                 [
                     [1.0, 0.0, 0.0, 0.0, 0.0],
                     [0.0, 1.0, 0.0, 0.0, 0.0],

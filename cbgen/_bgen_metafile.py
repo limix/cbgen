@@ -5,13 +5,54 @@ from typing import Union
 
 from numpy import empty, uint16, uint32, uint64, zeros
 
+from cbgen.typing import CData, Partition, Variants
+
 from ._ffi import ffi, lib
-from ._typing import CData, Partition, Variants
 
 __all__ = ["bgen_metafile"]
 
 
 class bgen_metafile:
+    """
+    BGEN metafile file handler.
+
+    >>> import cbgen
+    >>>
+    >>> bgen = cbgen.bgen_file(cbgen.example.get("haplotypes.bgen"))
+    >>> mf = cbgen.bgen_metafile(cbgen.example.get("haplotypes.bgen.metafile"))
+    >>> print(mf.npartitions)
+    1
+    >>> print(mf.nvariants)
+    4
+    >>> print(mf.partition_size)
+    4
+    >>> part = mf.read_partition(0)
+    >>> gt = bgen.read_genotype(part.variants.offset[0])
+    >>> print(gt.probability)
+    [[1. 0. 1. 0.]
+     [0. 1. 1. 0.]
+     [1. 0. 0. 1.]
+     [0. 1. 0. 1.]]
+    >>> mf.close()
+    >>> bgen.close()
+
+    Use `with`-statement context to guarantee file closing at the end.
+
+    >>> with cbgen.bgen_metafile(cbgen.example.get("haplotypes.bgen.metafile")) as mf:
+    ...     print(mf.npartitions)
+    1
+
+    Parameters
+    ----------
+    filepath
+        BGEN metafile file path.
+
+    Raises
+    ------
+    RuntimeError
+        If a file stream reading error occurs.
+    """
+
     def __init__(self, filepath: Union[str, Path]):
         self._filepath = Path(filepath)
         self._bgen_metafile: CData = ffi.NULL
@@ -21,21 +62,70 @@ class bgen_metafile:
 
     @property
     def filepath(self) -> Path:
+        """
+        File path.
+
+        Returns
+        -------
+        File path.
+        """
         return self._filepath
 
     @property
     def npartitions(self) -> int:
+        """
+        Number of partitions.
+
+        Returns
+        -------
+        Number of partitions.
+        """
         return lib.bgen_metafile_npartitions(self._bgen_metafile)
 
     @property
     def nvariants(self) -> int:
+        """
+        Number of variants.
+
+        Returns
+        -------
+        Number of variants.
+        """
         return lib.bgen_metafile_nvariants(self._bgen_metafile)
 
     @property
     def partition_size(self) -> int:
+        """
+        Number of variants per partition.
+
+        The last partition might have less variants than the partition size.
+        Every other partition is guaranteed to have ``partition_size``
+        variants.
+
+        Returns
+        -------
+        Partition size.
+        """
         return ceildiv(self.nvariants, self.npartitions)
 
     def read_partition(self, index: int) -> Partition:
+        """
+        Read partition.
+
+        Parameters
+        ----------
+        index
+            Partition index.
+
+        Returns
+        -------
+        Partition.
+
+        Raises
+        ------
+        RuntimeError
+            If index is invalid or a file stream reading error occurs.
+        """
         partition = lib.bgen_metafile_read_partition(self._bgen_metafile, index)
         if partition == ffi.NULL:
             raise RuntimeError(f"Could not read partition {partition}.")
@@ -87,6 +177,9 @@ class bgen_metafile:
         return Partition(part_offset, v)
 
     def close(self):
+        """
+        Close file stream.
+        """
         if self._bgen_metafile != ffi.NULL:
             lib.bgen_metafile_close(self._bgen_metafile)
 
@@ -97,5 +190,5 @@ class bgen_metafile:
         self.close()
 
 
-def ceildiv(a, b) -> int:
+def ceildiv(a: int, b: int) -> int:
     return -(-a // b)

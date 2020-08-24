@@ -1,6 +1,5 @@
 from importlib import import_module as _import_module
 
-from . import _typing as typing
 from . import example
 from ._bgen_file import bgen_file
 from ._bgen_metafile import bgen_metafile
