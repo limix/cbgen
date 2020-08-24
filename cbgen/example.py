@@ -26,4 +26,27 @@ goodboy = pooch.create(
 
 
 def get(filename: str) -> Path:
+    """
+    Get file path to an example.
+
+    Recognized file names:
+
+    - ``complex.23bits.no.samples.bgen``
+    - ``haplotypes.bgen``
+    - ``haplotypes.bgen.metadata.corrupted``
+    - ``haplotypes.bgen.metafile``
+    - ``wrong.metadata``
+    - ``merged_487400x220000.bgen``
+    - ``merged_487400x2420000.bgen``
+    - ``merged_487400x4840000.bgen``
+
+    Parameters
+    ----------
+    filename
+        File name to fetch.
+
+    Returns
+    -------
+    File path.
+    """
     return Path(goodboy.fetch(filename))
