@@ -1,7 +1,7 @@
 # cbgen
 
-Python wrapper around [bgen library](https://github.com/limix/bgen).
-([CBGEN documentation](https://cbgen.readthedocs.io)).
+Python wrapper around a BGEN library.
+([cbgen documentation](https://cbgen.readthedocs.io)).
 
 [BGEN](https://www.well.ox.ac.uk/~gav/bgen_format/) is a file format for
 storing large genetic datasets. It supports both unphased genotypes and phased
