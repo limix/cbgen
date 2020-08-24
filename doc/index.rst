@@ -1,5 +1,5 @@
-CBGEN's documentation
-=====================
+CBGEN |release| documentation
+=============================
 
 `BGEN`_ is a file format for storing large genetic datasets.
 It supports both unphased genotypes and phased haplotype data with variable
