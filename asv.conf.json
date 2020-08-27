@@ -1,0 +1,20 @@
+{
+    "version": 1,
+    "project": "cbgen",
+    "project_url": "https://github.com/limix/cbgen",
+    "repo": ".",
+    "environment_type": "virtualenv",
+    "show_commit_url": "https://github.com/limix/cbgen/commit/",
+    "pythons": [
+        "3.8"
+    ],
+    "benchmark_dir": "benchmarks",
+    "env_dir": ".asv/env",
+    "results_dir": ".asv/results",
+    "html_dir": "html",
+    "hash_length": 8,
+    "build_cache_size": 2,
+    "build_command": [
+        "python -mpip wheel --no-deps -w {build_cache_dir} {build_dir}"
+    ]
+}
