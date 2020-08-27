@@ -10,14 +10,6 @@ write_to = "cbgen/_version.py"
 [tool.isort]
 profile = "black"
 src_paths = ["cbgen"]
-known_third_party = [
-    "appdirs",
-    "cffi",
-    "numpy",
-    "pooch",
-    "pytest",
-    "pytest-runner",
-]
 
 [tool.coverage.report]
 exclude_lines = [

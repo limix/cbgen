@@ -1,8 +1,4 @@
 repos:
-    - repo: https://github.com/myint/autoflake
-      rev: v1.4
-      hooks:
-          - id: autoflake
     - repo: https://github.com/ambv/black
       rev: 19.10b0
       hooks:
