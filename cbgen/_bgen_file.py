@@ -4,7 +4,7 @@ from math import floor, sqrt
 from pathlib import Path
 from typing import Union
 
-from numpy import float64, full, nan, uint8, zeros
+from numpy import float32, float64, full, nan, uint8, zeros
 
 from cbgen.typing import CData, DtypeLike, Genotype
 
@@ -155,7 +155,7 @@ class bgen_file:
 
         lib.bgen_metafile_close(mf)
 
-    def read_genotype(self, offset: int) -> Genotype:
+    def read_genotype(self, offset: int, precision: int = 64) -> Genotype:
         """
         Read genotype.
 
@@ -163,6 +163,8 @@ class bgen_file:
         ----------
         offset
             Variant offset.
+        precision
+            Probability precision in bits: 64 (default) or 32.
 
         Returns
         -------
@@ -177,10 +179,19 @@ class bgen_file:
         if gt == ffi.NULL:
             raise RuntimeError(f"Could not open genotype (offset {offset}).")
 
+        if precision not in [64, 32]:
+            raise ValueError("Precision should be either 64 or 32.")
+
         nsamples = self.nsamples
         ncombs = lib.bgen_genotype_ncombs(gt)
-        probs = full((nsamples, ncombs), nan, dtype=float64)
-        err: int = lib.bgen_genotype_read(gt, ffi.cast("double *", probs.ctypes.data))
+        err: int = 0
+        if precision == 64:
+            probs = full((nsamples, ncombs), nan, dtype=float64)
+            err = lib.bgen_genotype_read64(gt, ffi.cast("double *", probs.ctypes.data))
+        else:
+            probs = full((nsamples, ncombs), nan, dtype=float32)
+            err = lib.bgen_genotype_read32(gt, ffi.cast("float *", probs.ctypes.data))
+
         if err != 0:
             msg = f"Could not read genotype probabilities (offset {offset})."
             raise RuntimeError(msg)

@@ -17,6 +17,8 @@ struct bgen_genotype *bgen_file_open_genotype(struct bgen_file *bgen_file, uint6
 struct bgen_genotype;
 void     bgen_genotype_close(struct bgen_genotype const *genotype);
 int      bgen_genotype_read(struct bgen_genotype *genotype, double *probabilities);
+int      bgen_genotype_read64(struct bgen_genotype *genotype, double *probabilities);
+int      bgen_genotype_read32(struct bgen_genotype *genotype, float *probabilities);
 uint16_t bgen_genotype_nalleles(struct bgen_genotype const *genotype);
 bool     bgen_genotype_missing(struct bgen_genotype const *genotype, uint32_t index);
 uint8_t  bgen_genotype_ploidy(struct bgen_genotype const *genotype, uint32_t index);

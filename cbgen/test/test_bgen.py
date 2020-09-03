@@ -121,6 +121,17 @@ def test_cbgen_phased_genotype(tmp_path):
     assert_allclose(gt.ploidy, [2, 2, 2, 2])
     assert_allclose(gt.missing, [False, False, False, False])
 
+    gt = bgen.read_genotype(voff, 32)
+    assert_allclose(
+        gt.probability,
+        [
+            [1.0, 0.0, 1.0, 0.0],
+            [0.0, 1.0, 1.0, 0.0],
+            [1.0, 0.0, 0.0, 1.0],
+            [0.0, 1.0, 0.0, 1.0],
+        ],
+    )
+
     assert part.variants.id[3] == b"SNP4"
     assert part.variants.rsid[3] == b"RS4"
     assert part.variants.chromosome[3] == b"1"
@@ -141,6 +152,17 @@ def test_cbgen_phased_genotype(tmp_path):
     assert gt.phased
     assert_allclose(gt.ploidy, [2, 2, 2, 2])
     assert_allclose(gt.missing, [False, False, False, False])
+
+    gt = bgen.read_genotype(voff, 32)
+    assert_allclose(
+        gt.probability,
+        [
+            [0.0, 1.0, 0.0, 1.0],
+            [1.0, 0.0, 1.0, 0.0],
+            [0.0, 1.0, 1.0, 0.0],
+            [1.0, 0.0, 0.0, 1.0],
+        ],
+    )
 
     mf.close()
     bgen.close()
@@ -184,6 +206,12 @@ def test_cbgen_complex_unphased(tmp_path: Path):
             assert_allclose(gt.ploidy, [1, 2, 2, 2])
             assert_allclose(gt.missing, [False, False, False, False])
 
+            gt = bgen.read_genotype(voff, 32)
+            assert_allclose(
+                gt.probability,
+                [[1.0, 0.0, nan], [1.0, 0.0, 0.0], [1.0, 0.0, 0.0], [0.0, 1.0, 0.0]],
+            )
+
             voff = part.variants.offset[-1]
             gt = bgen.read_genotype(voff)
             assert_allclose(
@@ -198,6 +226,20 @@ def test_cbgen_complex_unphased(tmp_path: Path):
             assert not gt.phased
             assert_allclose(gt.ploidy, [4, 4, 4, 4])
             assert_allclose(gt.missing, [False, False, False, False])
+
+            gt = bgen.read_genotype(voff, 32)
+            assert_allclose(
+                gt.probability,
+                [
+                    [1.0, 0.0, 0.0, 0.0, 0.0],
+                    [0.0, 1.0, 0.0, 0.0, 0.0],
+                    [0.0, 0.0, 1.0, 0.0, 0.0],
+                    [0.0, 0.0, 0.0, 1.0, 0.0],
+                ],
+            )
+
+            with pytest.raises(ValueError):
+                bgen.read_genotype(voff, 12)
 
             valid_offsets = set(list(part.variants.offset))
             all_offsets = set(list(range(0, int(max(valid_offsets)) + 1)))
