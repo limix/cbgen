@@ -202,6 +202,10 @@ def test_cbgen_complex_unphased(tmp_path: Path):
                 gt.probability,
                 [[1.0, 0.0, nan], [1.0, 0.0, 0.0], [1.0, 0.0, 0.0], [0.0, 1.0, 0.0]],
             )
+            assert_allclose(
+                bgen.read_probability(voff),
+                [[1.0, 0.0, nan], [1.0, 0.0, 0.0], [1.0, 0.0, 0.0], [0.0, 1.0, 0.0]],
+            )
             assert not gt.phased
             assert_allclose(gt.ploidy, [1, 2, 2, 2])
             assert_allclose(gt.missing, [False, False, False, False])
