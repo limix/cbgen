@@ -259,6 +259,10 @@ class bgen_file:
         """
         if self._bgen_file != ffi.NULL:
             lib.bgen_file_close(self._bgen_file)
+            self._bgen_file = ffi.NULL
+
+    def __del__(self):
+        self.close()
 
     def __enter__(self) -> bgen_file:
         return self

@@ -182,6 +182,10 @@ class bgen_metafile:
         """
         if self._bgen_metafile != ffi.NULL:
             lib.bgen_metafile_close(self._bgen_metafile)
+            self._bgen_metafile = ffi.NULL
+
+    def __del__(self):
+        self.close()
 
     def __enter__(self) -> bgen_metafile:
         return self
