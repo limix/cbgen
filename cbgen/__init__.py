@@ -3,6 +3,7 @@ from importlib import import_module as _import_module
 from . import example
 from ._bgen_file import bgen_file
 from ._bgen_metafile import bgen_metafile
+from ._env import BGEN_CACHE_HOME
 from ._testit import test
 
 try:
@@ -23,6 +24,7 @@ except ModuleNotFoundError:
     __version__ = "x.x.x"
 
 __all__ = [
+    "BGEN_CACHE_HOME",
     "__version__",
     "bgen_file",
     "bgen_metafile",

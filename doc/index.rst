@@ -49,6 +49,7 @@ Usage example
 
    bgen_file
    bgen_metafile
+   cache_home
    example
    typing
 
