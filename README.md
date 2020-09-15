@@ -45,6 +45,7 @@ pip install cbgen
 
 ## Authors
 
+* [Carl Kadie](https://github.com/CarlKCarlK)
 * [Danilo Horta](https://github.com/horta)
 
 ## License
