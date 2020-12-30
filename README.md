@@ -50,4 +50,4 @@ pip install cbgen
 
 ## License
 
-This project is licensed under the [MIT License](https://raw.githubusercontent.com/limix/cbgen/master/LICENSE).
+This project is licensed under the [MIT License](https://raw.githubusercontent.com/limix/cbgen/main/LICENSE).
