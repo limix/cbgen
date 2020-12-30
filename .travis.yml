@@ -19,8 +19,8 @@ matrix:
       before_install:
         - python3 -m pip install --upgrade pip setuptools
         - bash <(curl -fsSL https://raw.githubusercontent.com/horta/zstd.install/main/install)
-        - curl -fsSL https://git.io/JerYI | GITHUB_USER=horta GITHUB_PROJECT=almosthere bash
-        - curl -fsSL https://git.io/JerYI | GITHUB_USER=limix GITHUB_PROJECT=bgen bash
+        - bash -c "$(curl -fsSL https://git.io/JerYI)" -s horta/almosthere
+        - bash -c "$(curl -fsSL https://git.io/JerYI)" -s limix/bgen
     - os: osx
       osx_image: xcode11.2
       env:
@@ -32,8 +32,8 @@ matrix:
       before_install:
         - python3 -m pip install --upgrade pip setuptools
         - bash <(curl -fsSL https://raw.githubusercontent.com/horta/zstd.install/main/install)
-        - curl -fsSL https://git.io/JerYI | GITHUB_USER=horta GITHUB_PROJECT=almosthere bash
-        - curl -fsSL https://git.io/JerYI | GITHUB_USER=limix GITHUB_PROJECT=bgen bash
+        - bash -c "$(curl -fsSL https://git.io/JerYI)" -s horta/almosthere
+        - bash -c "$(curl -fsSL https://git.io/JerYI)" -s limix/bgen
     - os: windows
       language: shell
       env:
@@ -54,7 +54,7 @@ matrix:
         - choco install zstandard --no-progress -y
         - powershell -Command "(New-Object Net.WebClient).DownloadFile('https://raw.githubusercontent.com/horta/zlib.install/master/install.bat',
           'install.bat')" ; ./install.bat
-        - curl -fsSL https://git.io/JerYI | GITHUB_USER=horta GITHUB_PROJECT=almosthere bash
+        - bash -c "$(curl -fsSL https://git.io/JerYI)" -s horta/almosthere
         - cp /c/Program\ Files/zlib/lib/zlib.lib /c/Program\ Files/zlib/lib/z.lib
         - cp /c/Program\ Files/zlib/bin/zlib.dll /c/Program\ Files/zlib/bin/z.dll
         - cp /c/ProgramData/chocolatey/lib/zstandard/tools/dll/libzstd.dll.a /c/ProgramData/chocolatey/lib/zstandard/tools/dll/libzstd.lib
@@ -63,7 +63,7 @@ matrix:
         - cp /c/Program\ Files/zlib/bin/zlib.dll /c/Windows/system32/
         - cp /c/Program\ Files/zlib/bin/z.dll /c/Windows/system32/
         - cp /c/Program\ Files/athr/bin/athr.dll /c/Windows/system32/
-        - curl -fsSL https://git.io/JerYI | GITHUB_USER=limix GITHUB_PROJECT=bgen bash
+        - bash -c "$(curl -fsSL https://git.io/JerYI)" -s limix/bgen
         - cp /c/Program\ Files/bgen/bin/bgen.dll /c/Windows/system32/
 addons:
   apt:
