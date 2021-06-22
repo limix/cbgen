@@ -5,9 +5,7 @@ powershell -Command "(New-Object Net.WebClient).DownloadFile('https://raw.github
 bash -c "$(curl -fsSL https://git.io/JerYI)" -s horta/almosthere
 bash -c "$(curl -fsSL https://git.io/JerYI)" -s limix/bgen
 
-# cp /c/Windows/system32/athr.dll cbgen/
-# cp /c/Windows/system32/bgen.dll cbgen/
-# cp /c/Windows/system32/zlib.dll cbgen/
-# cp /c/Windows/system32/libzstd.dll cbgen/
-
-# cp /c/Program Files/zstd/lib:/c/Program Files/zlib/lib:/c/Program Files/athr/lib:/c/Program Files/bgen/lib
+cp /c/Program Files/athr/bin/athr.dll cbgen/
+cp /c/Program Files/bgen/bin/bgen.dll cbgen/
+cp /c/Program Files/zlib/bin/zlib.dll cbgen/
+cp /c/Program Files/zstd/bin/zstd.dll cbgen/

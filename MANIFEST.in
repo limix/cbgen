@@ -5,7 +5,7 @@ include cbgen/bgen.dll
 include cbgen/genotype.c
 include cbgen/genotype.h
 include cbgen/interface.h
-include cbgen/libzstd.dll
+include cbgen/zstd.dll
 include cbgen/partition.c
 include cbgen/partition.h
 include cbgen/samples.c
