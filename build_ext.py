@@ -6,12 +6,12 @@ from typing import List
 from cffi import FFI
 
 ffibuilder = FFI()
-libs = ["bgen", "athr"]
+libs = ["bgen", "athr", "zstd"]
 
 if platform.system() == "Windows":
-    libs += ["zlib", "libzstd"]
+    libs += ["zlib"]
 else:
-    libs += ["z", "zstd"]
+    libs += ["z"]
 
 folder = os.path.dirname(os.path.abspath(__file__))
 

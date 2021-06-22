@@ -50,18 +50,11 @@ jobs:
           if type sudo >/dev/null 2>&1; then SUDO="sudo"; else SUDO=""; fi
           $SUDO bash -c "$(curl -fsSL https://git.io/JerYI)" -s limix/bgen
 
-      - name: Show env
-        run: env
-
-      - name: Print INCLUDE
-        run: echo $INCLUDE
-
       - name: Install python dependencies
         run: |
           python -m pip install --upgrade pip
-          python setup.py build_ext --inplace
-          pip install . && pip uninstall `python setup.py --name` --yes
           pip install flake8 pytest black isort
+          python setup.py build_ext --inplace && pip install . && pip uninstall `python setup.py --name` --yes
 
       - name: Lint
         run: |
