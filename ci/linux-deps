@@ -6,8 +6,6 @@ yum remove -y cmake
 python -m pip install pip --upgrade
 python -m pip install cmake numpy
 
-curl https://raw.githubusercontent.com/horta/zstd.install/master/install --output install-zstd
-bash install-zstd
-
-curl -fsSL https://git.io/JerYI | GITHUB_USER=horta GITHUB_PROJECT=almosthere bash
-curl -fsSL https://git.io/JerYI | GITHUB_USER=limix GITHUB_PROJECT=bgen bash
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/horta/zstd.install/main/install)"
+bash -c "$(curl -fsSL https://git.io/JerYI)" -s horta/almosthere
+bash -c "$(curl -fsSL https://git.io/JerYI)" -s limix/bgen

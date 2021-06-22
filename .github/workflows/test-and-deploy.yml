@@ -2,14 +2,16 @@ name: Test, build, and deploy to PyPI
 
 on: [push, pull_request]
 
-jobs:
-  env:
-    BGEN_EXTRA_LINK_ARGS: "-Wl,-rpath,/usr/local/lib"
-    CIBW_BEFORE_BUILD_LINUX: "{project}/ci/linux-deps"
-    CIBW_BEFORE_BUILD_MACOS: "{project}/ci/macos-deps"
-    CIBW_BEFORE_BUILD_WINDOWS: "bash {project}/ci/win-deps"
-    CIBW_TEST_COMMAND: "bash {project}/ci/test"
-    CIBW_SKIP: "pp27* pp34* pp35* pp36* cp27-* cp34-* cp35-* cp36-*"
+env:
+  BGEN_EXTRA_LINK_ARGS: "-Wl,-rpath,/usr/local/lib"
+  CIBW_BEFORE_BUILD_LINUX: "{project}/ci/linux-deps"
+  CIBW_BEFORE_BUILD_MACOS: "{project}/ci/macos-deps"
+  CIBW_BEFORE_BUILD_WINDOWS: "bash {project}/ci/win-deps"
+  CIBW_TEST_COMMAND: "bash {project}/ci/test"
+  CIBW_SKIP: "pp27* pp34* pp35* pp36* cp27-* cp34-* cp35-* cp36-*"
+  INCLUDE: "/c/Program Files/zstd/include:/c/Program Files/zlib/include:/c/Program Files/athr/include:/c/Program Files/bgen/include"
+  LIB: "/c/Program Files/zstd/lib:/c/Program Files/zlib/lib:/c/Program Files/athr/lib:/c/Program Files/bgen/lib"
+
   test:
     name: Test on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}

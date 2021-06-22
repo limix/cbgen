@@ -1,6 +1,13 @@
 #!/bin/bash
 
-cp /c/Windows/system32/athr.dll cbgen/
-cp /c/Windows/system32/bgen.dll cbgen/
-cp /c/Windows/system32/zlib.dll cbgen/
-cp /c/Windows/system32/libzstd.dll cbgen/
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/horta/zstd.install/main/install)"
+powershell -Command "(New-Object Net.WebClient).DownloadFile('https://raw.githubusercontent.com/horta/zlib.install/master/install.bat', 'install.bat')"; ./install.bat
+bash -c "$(curl -fsSL https://git.io/JerYI)" -s horta/almosthere
+bash -c "$(curl -fsSL https://git.io/JerYI)" -s limix/bgen
+
+# cp /c/Windows/system32/athr.dll cbgen/
+# cp /c/Windows/system32/bgen.dll cbgen/
+# cp /c/Windows/system32/zlib.dll cbgen/
+# cp /c/Windows/system32/libzstd.dll cbgen/
+
+# cp /c/Program Files/zstd/lib:/c/Program Files/zlib/lib:/c/Program Files/athr/lib:/c/Program Files/bgen/lib
