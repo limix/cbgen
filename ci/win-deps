@@ -1,6 +1,14 @@
 #!/bin/bash
 
-export ARCH=x$(python -c "import platform; print(platform.architecture()[0][:2], end='')")
+env
+
+BITS=$(python -c "import platform; print(platform.architecture()[0][:2], end='')")
+if [[ $BITS != "32" ]]
+then
+    export ARCH=Win32
+fi
+
+export ARCH=
 echo "DANILO: $ARCH"
 
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/horta/zstd.install/main/install)"
