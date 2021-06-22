@@ -3,12 +3,14 @@
 env
 
 BITS=$(python -c "import platform; print(platform.architecture()[0][:2], end='')")
-if [[ $BITS != "32" ]]
+
+echo "BITS: $BITS"
+if [[ $BITS == "32" ]]
 then
     export ARCH=Win32
 fi
 
-echo "DANILO: $ARCH"
+echo "ARCH: $ARCH"
 
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/horta/zstd.install/main/install)"
 powershell -Command "(New-Object Net.WebClient).DownloadFile('https://raw.githubusercontent.com/horta/zlib.install/master/install.bat', 'install.bat')"; ./install.bat
