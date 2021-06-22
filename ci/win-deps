@@ -1,5 +1,8 @@
 #!/bin/bash
 
+export ARCH=x$(python -c "import platform; print(platform.architecture()[0][:2], end='')")
+echo "DANILO: $ARCH"
+
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/horta/zstd.install/main/install)"
 powershell -Command "(New-Object Net.WebClient).DownloadFile('https://raw.githubusercontent.com/horta/zlib.install/master/install.bat', 'install.bat')"; ./install.bat
 bash -c "$(curl -fsSL https://git.io/JerYI)" -s horta/almosthere
