@@ -56,6 +56,15 @@ jobs:
           pip install flake8 pytest black isort
           python setup.py build_ext --inplace && pip install . --use-feature=in-tree-build && pip uninstall "$(python setup.py --name)" --yes
 
+      - name: Copy DLLs
+        if: matrix.os == 'windows-latest'
+        shell: bash
+        run: |
+          cp "/c/Program Files/athr/bin/athr.dll" cbgen/
+          cp "/c/Program Files/bgen/bin/bgen.dll" cbgen/
+          cp "/c/Program Files/zlib/bin/zlib.dll" cbgen/
+          cp "/c/Program Files/zstd/bin/zstd.dll" cbgen/
+
       - name: Lint
         run: |
           flake8 .
