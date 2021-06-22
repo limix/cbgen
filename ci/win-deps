@@ -8,7 +8,6 @@ then
     export ARCH=Win32
 fi
 
-export ARCH=
 echo "DANILO: $ARCH"
 
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/horta/zstd.install/main/install)"
