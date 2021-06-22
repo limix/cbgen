@@ -1,10 +1,7 @@
 #!/bin/bash
 
-env
-
 BITS=$(python -c "import platform; print(platform.architecture()[0][:2], end='')")
 
-echo "BITS: $BITS"
 if [[ $BITS == "32" ]]
 then
     export ARCH=Win32
@@ -13,14 +10,12 @@ else
     PREFIX="/c/Program Files (x86)"
 fi
 
-echo "ARCH: $ARCH"
-
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/horta/zstd.install/main/install)"
 powershell -Command "(New-Object Net.WebClient).DownloadFile('https://raw.githubusercontent.com/horta/zlib.install/master/install.bat', 'install.bat')"; ./install.bat
 bash -c "$(curl -fsSL https://git.io/JerYI)" -s horta/almosthere
 bash -c "$(curl -fsSL https://git.io/JerYI)" -s limix/bgen
 
-cp "/c/Program Files/athr/bin/athr.dll" cbgen/
-cp "/c/Program Files/bgen/bin/bgen.dll" cbgen/
-cp "/c/Program Files/zlib/bin/zlib.dll" cbgen/
-cp "/c/Program Files/zstd/bin/zstd.dll" cbgen/
+cp "$PREFIX/athr/bin/athr.dll" cbgen/
+cp "$PREFIX/bgen/bin/bgen.dll" cbgen/
+cp "$PREFIX/zlib/bin/zlib.dll" cbgen/
+cp "$PREFIX/zstd/bin/zstd.dll" cbgen/
