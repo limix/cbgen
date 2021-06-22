@@ -9,8 +9,8 @@ env:
   CIBW_BEFORE_BUILD_WINDOWS: "bash {project}/ci/win-deps"
   CIBW_TEST_COMMAND: "bash {project}/ci/test"
   CIBW_SKIP: "pp27* pp34* pp35* pp36* cp27-* cp34-* cp35-* cp36-*"
-  INCLUDE: "c:\\Program Files\\zstd\\include;c:\\Program Files\\zlib\\include;c:\\Program Files\\athr\\include;c:\\Program Files\\bgen\\include"
-  LIB: "c:\\Program Files\\zstd\\lib;c:\\Program Files\\zlib\\lib;c:\\Program Files\\athr\\lib;c:\\Program Files\\bgen\\lib"
+  INCLUDE: "c:\\Program Files\\zstd\\include;c:\\Program Files\\zlib\\include;c:\\Program Files\\athr\\include;c:\\Program Files\\bgen\\include;c:\\Program Files (x86)\\zstd\\include;c:\\Program Files (x86)\\zlib\\include;c:\\Program Files (x86)\\athr\\include;c:\\Program Files (x86)\\bgen\\include"
+  LIB: "c:\\Program Files\\zstd\\lib;c:\\Program Files\\zlib\\lib;c:\\Program Files\\athr\\lib;c:\\Program Files\\bgen\\lib;c:\\Program Files (x86)\\zstd\\lib;c:\\Program Files (x86)\\zlib\\lib;c:\\Program Files (x86)\\athr\\lib;c:\\Program Files (x86)\\bgen\\lib"
 
 jobs:
   test:
