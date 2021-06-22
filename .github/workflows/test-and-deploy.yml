@@ -12,6 +12,7 @@ env:
   INCLUDE: "/c/Program Files/zstd/include:/c/Program Files/zlib/include:/c/Program Files/athr/include:/c/Program Files/bgen/include"
   LIB: "/c/Program Files/zstd/lib:/c/Program Files/zlib/lib:/c/Program Files/athr/lib:/c/Program Files/bgen/lib"
 
+jobs:
   test:
     name: Test on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
