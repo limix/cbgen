@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# exit when any command fails
+set -e
+# keep track of the last executed command
+trap 'last_command=$current_command; current_command=$BASH_COMMAND' DEBUG
+# echo an error message before exiting
+trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
+
 BITS=$(python -c "import platform; print(platform.architecture()[0][:2], end='')")
 
 if [[ $BITS == "32" ]]
@@ -10,17 +17,21 @@ else
     PREFIX="/c/Program Files"
 fi
 
-test -d "$PREFIX/athr" && rm -rf "$PREFIX/athr" || true
-test -d "$PREFIX/bgen" && rm -rf "$PREFIX/bgen" || true
-test -d "$PREFIX/zlib" && rm -rf "$PREFIX/zlib" || true
-test -d "$PREFIX/zstd" && rm -rf "$PREFIX/zstd" || true
+declare -a prefixes=("/c/Program Files (x86)" "/c/Program Files")
+declare -a libs=("athr" "bgen" "zlib" "zstd")
+
+# Clean-up previously installed libraries.
+for pref in "${prefixes[@]}"; do
+    for lib in "${libs[@]}"; do
+        test -d "$pref/$lib" && rm -rf "$pref/$lib"
+    done
+done
 
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/horta/zstd.install/main/install)"
 powershell -Command "(New-Object Net.WebClient).DownloadFile('https://raw.githubusercontent.com/horta/zlib.install/master/install.bat', 'install.bat')"; ./install.bat
 bash -c "$(curl -fsSL https://git.io/JerYI)" -s horta/almosthere
 bash -c "$(curl -fsSL https://git.io/JerYI)" -s limix/bgen
 
-cp "$PREFIX/athr/bin/athr.dll" cbgen/
-cp "$PREFIX/bgen/bin/bgen.dll" cbgen/
-cp "$PREFIX/zlib/bin/zlib.dll" cbgen/
-cp "$PREFIX/zstd/bin/zstd.dll" cbgen/
+for lib in "${libs[@]}"; do
+    cp "$PREFIX/$lib/bin/$lib.dll" cbgen/
+done
