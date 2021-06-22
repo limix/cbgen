@@ -10,6 +10,11 @@ else
     PREFIX="/c/Program Files (x86)"
 fi
 
+test -d "$PREFIX/athr" && rm -rf "$PREFIX/athr" || true
+test -d "$PREFIX/bgen" && rm -rf "$PREFIX/bgen" || true
+test -d "$PREFIX/zlib" && rm -rf "$PREFIX/zlib" || true
+test -d "$PREFIX/zstd" && rm -rf "$PREFIX/zstd" || true
+
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/horta/zstd.install/main/install)"
 powershell -Command "(New-Object Net.WebClient).DownloadFile('https://raw.githubusercontent.com/horta/zlib.install/master/install.bat', 'install.bat')"; ./install.bat
 bash -c "$(curl -fsSL https://git.io/JerYI)" -s horta/almosthere
