@@ -5,9 +5,9 @@ BITS=$(python -c "import platform; print(platform.architecture()[0][:2], end='')
 if [[ $BITS == "32" ]]
 then
     export ARCH=Win32
-    PREFIX="/c/Program Files"
-else
     PREFIX="/c/Program Files (x86)"
+else
+    PREFIX="/c/Program Files"
 fi
 
 test -d "$PREFIX/athr" && rm -rf "$PREFIX/athr" || true
