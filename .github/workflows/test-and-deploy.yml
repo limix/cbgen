@@ -28,11 +28,20 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install zstd
+      - name: Check for sudo
         shell: bash
         run: |
           if type sudo >/dev/null 2>&1; then SUDO="sudo"; else SUDO=""; fi
-          $SUDO bash -c "$(curl -fsSL https://raw.githubusercontent.com/horta/zstd.install/main/install)"
+          echo "SUDO=$SUDO" >> $GITHUB_ENV
+
+      - name: Set system version
+        if: matrix.os == 'windows-latest'
+        shell: bash
+        run: echo "CMAKE_SYSTEM_VERSION='10.0.19041.0'" >> $GITHUB_ENV
+
+      - name: Install zstd
+        shell: bash
+        run: $SUDO bash -c "$(curl -fsSL https://raw.githubusercontent.com/horta/zstd.install/main/install)"
 
       - name: Install zlib
         if: matrix.os == 'windows-latest'
@@ -40,21 +49,15 @@ jobs:
 
       - name: Install elapsed
         shell: bash
-        run: |
-          if type sudo >/dev/null 2>&1; then SUDO="sudo"; else SUDO=""; fi
-          $SUDO bash -c "$(curl -fsSL https://git.io/Jz7Oa)" -s horta/elapsed
+        run: $SUDO bash -c "$(curl -fsSL https://git.io/Jz7Oa)" -s horta/elapsed
 
       - name: Install almosthere
         shell: bash
-        run: |
-          if type sudo >/dev/null 2>&1; then SUDO="sudo"; else SUDO=""; fi
-          $SUDO bash -c "$(curl -fsSL https://git.io/Jz7Oa)" -s horta/almosthere
+        run: $SUDO bash -c "$(curl -fsSL https://git.io/Jz7Oa)" -s horta/almosthere
 
       - name: Install bgen
         shell: bash
-        run: |
-          if type sudo >/dev/null 2>&1; then SUDO="sudo"; else SUDO=""; fi
-          $SUDO bash -c "$(curl -fsSL https://git.io/JerYI)" -s limix/bgen
+        run: $SUDO bash -c "$(curl -fsSL https://git.io/JerYI)" -s limix/bgen
 
       - name: Install python dependencies
         run: |
