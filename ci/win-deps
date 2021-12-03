@@ -31,7 +31,7 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/horta/zstd.install/main/
 powershell -Command "(New-Object Net.WebClient).DownloadFile('https://raw.githubusercontent.com/horta/zlib.install/master/install.bat', 'install.bat')"; ./install.bat
 bash -c "$(curl -fsSL https://git.io/Jz7Oa)" -s horta/elapsed || exit 1
 bash -c "$(curl -fsSL https://git.io/Jz7Oa)" -s horta/almosthere || exit 1
-bash -c "$(curl -fsSL https://git.io/Jz7Oa)" -s horta/bgen || exit 1
+bash -c "$(curl -fsSL https://git.io/Jz7Oa)" -s limix/bgen || exit 1
 
 for lib in "${libs[@]}"; do
     cp "$PREFIX/$lib/bin/$lib.dll" cbgen/
