@@ -37,7 +37,9 @@ jobs:
       - name: Set system version
         if: matrix.os == 'windows-latest'
         shell: bash
-        run: echo "CMAKE_SYSTEM_VERSION='10.0.19041.0'" >> $GITHUB_ENV
+        run: |
+          echo "CMAKE_SYSTEM_VERSION='10.0.19041.0'" >> $GITHUB_ENV
+          echo "CMAKE_GENERATOR_PLATFORM=x64" >>  $GITHUB_ENV
 
       - name: Install zstd
         shell: bash
