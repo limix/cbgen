@@ -11,9 +11,10 @@ BITS=$(python3 -c "import platform; print(platform.architecture()[0][:2], end=''
 
 if [[ $BITS == "32" ]]
 then
-    export ARCH=Win32
+    export CMAKE_GENERATOR_PLATFORM=Win32
     PREFIX="/c/Program Files (x86)"
 else
+    export CMAKE_GENERATOR_PLATFORM=x64
     PREFIX="/c/Program Files"
 fi
 
