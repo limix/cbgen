@@ -57,7 +57,7 @@ jobs:
 
       - name: Install bgen
         shell: bash
-        run: $SUDO bash -c "$(curl -fsSL https://git.io/JerYI)" -s limix/bgen
+        run: $SUDO bash -c "$(curl -fsSL https://git.io/Jz7Oa)" -s limix/bgen
 
       - name: Install python dependencies
         run: |

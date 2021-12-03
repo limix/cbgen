@@ -3,8 +3,8 @@
 yum install -y libffi libffi-devel zlib-devel
 yum remove -y cmake
 
-python -m pip install pip --upgrade
-python -m pip install cmake numpy
+python3 -m pip install pip --upgrade
+python3 -m pip install cmake numpy
 
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/horta/zstd.install/main/install)"
 bash -c "$(curl -fsSL https://git.io/Jz7Oa)" -s horta/elapsed || exit 1
