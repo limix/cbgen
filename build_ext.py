@@ -6,7 +6,7 @@ from typing import List
 from cffi import FFI
 
 ffibuilder = FFI()
-libs = ["bgen", "athr", "zstd"]
+libs = ["bgen", "elapsed", "athr", "zstd"]
 
 if platform.system() == "Windows":
     libs += ["zlib"]

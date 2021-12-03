@@ -18,7 +18,7 @@ else
 fi
 
 declare -a prefixes=("/c/Program Files (x86)" "/c/Program Files")
-declare -a libs=("athr" "bgen" "zlib" "zstd")
+declare -a libs=("elapsed" "athr" "bgen" "zlib" "zstd")
 
 # Clean-up previously installed libraries.
 for pref in "${prefixes[@]}"; do
@@ -29,8 +29,9 @@ done
 
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/horta/zstd.install/main/install)"
 powershell -Command "(New-Object Net.WebClient).DownloadFile('https://raw.githubusercontent.com/horta/zlib.install/master/install.bat', 'install.bat')"; ./install.bat
-bash -c "$(curl -fsSL https://git.io/JerYI)" -s horta/almosthere
-bash -c "$(curl -fsSL https://git.io/JerYI)" -s limix/bgen
+bash -c "$(curl -fsSL https://git.io/Jz7Oa)" -s horta/elapsed || exit 1
+bash -c "$(curl -fsSL https://git.io/Jz7Oa)" -s horta/almosthere || exit 1
+bash -c "$(curl -fsSL https://git.io/Jz7Oa)" -s horta/bgen || exit 1
 
 for lib in "${libs[@]}"; do
     cp "$PREFIX/$lib/bin/$lib.dll" cbgen/

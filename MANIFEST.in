@@ -1,5 +1,6 @@
 include LICENSE
 include README.md
+include cbgen/elapsed.dll
 include cbgen/athr.dll
 include cbgen/bgen.dll
 include cbgen/genotype.c

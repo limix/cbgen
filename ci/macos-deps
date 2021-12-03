@@ -4,5 +4,6 @@ python3 -m pip install cmake
 python3 -m pip install numpy --prefer-binary
 
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/horta/zstd.install/main/install)"
-bash -c "$(curl -fsSL https://git.io/JerYI)" -s horta/almosthere
-bash -c "$(curl -fsSL https://git.io/JerYI)" -s limix/bgen
+bash -c "$(curl -fsSL https://git.io/Jz7Oa)" -s horta/elapsed || exit 1
+bash -c "$(curl -fsSL https://git.io/Jz7Oa)" -s horta/almosthere || exit 1
+bash -c "$(curl -fsSL https://git.io/Jz7Oa)" -s horta/bgen || exit 1

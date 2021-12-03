@@ -9,8 +9,8 @@ env:
   CIBW_BEFORE_BUILD_WINDOWS: "bash {project}/ci/win-deps"
   CIBW_TEST_COMMAND: "bash {project}/ci/test"
   CIBW_SKIP: "pp* cp27-* cp34-* cp35-* cp36-*"
-  INCLUDE: "c:\\Program Files\\zstd\\include;c:\\Program Files\\zlib\\include;c:\\Program Files\\athr\\include;c:\\Program Files\\bgen\\include;c:\\Program Files (x86)\\zstd\\include;c:\\Program Files (x86)\\zlib\\include;c:\\Program Files (x86)\\athr\\include;c:\\Program Files (x86)\\bgen\\include"
-  LIB: "c:\\Program Files\\zstd\\lib;c:\\Program Files\\zlib\\lib;c:\\Program Files\\athr\\lib;c:\\Program Files\\bgen\\lib;c:\\Program Files (x86)\\zstd\\lib;c:\\Program Files (x86)\\zlib\\lib;c:\\Program Files (x86)\\athr\\lib;c:\\Program Files (x86)\\bgen\\lib"
+  INCLUDE: "c:\\Program Files\\zstd\\include;c:\\Program Files\\zlib\\include;c:\\Program Files\\elapsed\\include;c:\\Program Files\\athr\\include;c:\\Program Files\\bgen\\include;c:\\Program Files (x86)\\zstd\\include;c:\\Program Files (x86)\\zlib\\include;c:\\Program Files (x86)\\elapsed\\include;c:\\Program Files (x86)\\athr\\include;c:\\Program Files (x86)\\bgen\\include"
+  LIB: "c:\\Program Files\\zstd\\lib;c:\\Program Files\\zlib\\lib;c:\\Program Files\\elapsed\\lib;c:\\Program Files\\athr\\lib;c:\\Program Files\\bgen\\lib;c:\\Program Files (x86)\\zstd\\lib;c:\\Program Files (x86)\\zlib\\lib;c:\\Program Files (x86)\\elapsed\\lib;c:\\Program Files (x86)\\athr\\lib;c:\\Program Files (x86)\\bgen\\lib"
 
 jobs:
   test:
@@ -38,11 +38,17 @@ jobs:
         if: matrix.os == 'windows-latest'
         run: powershell -Command "(New-Object Net.WebClient).DownloadFile('https://raw.githubusercontent.com/horta/zlib.install/master/install.bat', 'install.bat')"; ./install.bat
 
+      - name: Install elapsed
+        shell: bash
+        run: |
+          if type sudo >/dev/null 2>&1; then SUDO="sudo"; else SUDO=""; fi
+          $SUDO bash -c "$(curl -fsSL https://git.io/Jz7Oa)" -s horta/elapsed
+
       - name: Install almosthere
         shell: bash
         run: |
           if type sudo >/dev/null 2>&1; then SUDO="sudo"; else SUDO=""; fi
-          $SUDO bash -c "$(curl -fsSL https://git.io/JerYI)" -s horta/almosthere
+          $SUDO bash -c "$(curl -fsSL https://git.io/Jz7Oa)" -s horta/almosthere
 
       - name: Install bgen
         shell: bash
@@ -60,6 +66,7 @@ jobs:
         if: matrix.os == 'windows-latest'
         shell: bash
         run: |
+          cp "/c/Program Files/elapsed/bin/elapsed.dll" cbgen/
           cp "/c/Program Files/athr/bin/athr.dll" cbgen/
           cp "/c/Program Files/bgen/bin/bgen.dll" cbgen/
           cp "/c/Program Files/zlib/bin/zlib.dll" cbgen/
