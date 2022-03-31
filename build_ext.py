@@ -42,7 +42,7 @@ if "BGEN_EXTRA_LINK_ARGS" in os.environ:
 
 ffibuilder.set_source(
     "cbgen._ffi",
-    fr"""
+    rf"""
     #include "bgen/bgen.h"
     {genotype_c}
     {partition_c}
