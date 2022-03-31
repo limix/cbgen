@@ -1,6 +1,6 @@
 name: Test, build, and deploy to PyPI
 
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch]
 
 env:
   BGEN_EXTRA_LINK_ARGS: "-Wl,-rpath,/usr/local/lib"
