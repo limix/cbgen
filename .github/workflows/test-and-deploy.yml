@@ -8,7 +8,7 @@ env:
   CIBW_BEFORE_BUILD_MACOS: "{project}/ci/macos-deps"
   CIBW_BEFORE_BUILD_WINDOWS: "bash {project}/ci/win-deps"
   CIBW_TEST_COMMAND: "bash {project}/ci/test"
-  CIBW_SKIP: "pp* cp27-* cp34-* cp35-* cp36-*"
+  CIBW_SKIP: "pp* cp36-*"
   INCLUDE: "c:\\Program Files\\zstd\\include;c:\\Program Files\\zlib\\include;c:\\Program Files\\elapsed\\include;c:\\Program Files\\athr\\include;c:\\Program Files\\bgen\\include;c:\\Program Files (x86)\\zstd\\include;c:\\Program Files (x86)\\zlib\\include;c:\\Program Files (x86)\\elapsed\\include;c:\\Program Files (x86)\\athr\\include;c:\\Program Files (x86)\\bgen\\include"
   LIB: "c:\\Program Files\\zstd\\lib;c:\\Program Files\\zlib\\lib;c:\\Program Files\\elapsed\\lib;c:\\Program Files\\athr\\lib;c:\\Program Files\\bgen\\lib;c:\\Program Files (x86)\\zstd\\lib;c:\\Program Files (x86)\\zlib\\lib;c:\\Program Files (x86)\\elapsed\\lib;c:\\Program Files (x86)\\athr\\lib;c:\\Program Files (x86)\\bgen\\lib"
 
