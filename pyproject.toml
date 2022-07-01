@@ -1,16 +1,50 @@
 [build-system]
-requires = ["setuptools>=49.2.0", "wheel>=0.34.2", "cffi>=1.14.0",
-    "setuptools-scm[toml]>=4.1.2"]
-build-backend = "setuptools.build_meta"
+requires = ["poetry_core>=1.0.8", "cffi>=1.15.1", "cmake>=3.22.5"]
+build-backend = "poetry.core.masonry.api"
 
-[tool.setuptools_scm]
-write_to = "cbgen/_version.py"
-
-[tool.isort]
-profile = "black"
-src_paths = ["cbgen"]
-
-[tool.coverage.report]
-exclude_lines = [
-    "if __name__ == .__main__.:",
+[tool.poetry]
+name = "cbgen"
+version = "1.0.2"
+description = "Python wrapper around a BGEN library"
+license = "MIT"
+authors = ["Carl Kadie <carlk@msn.com>", "Danilo Horta <danilo.horta@pm.me>"]
+readme = "README.md"
+repository = "https://github.com/limix/cbgen"
+homepage = "https://github.com/limix/cbgen"
+keywords = ["bgen", "reader", "genetics"]
+classifiers = ["License :: OSI Approved :: MIT License"]
+include = [
+  { path = "build_ext_deps", format = "sdist" },
+  { path = "cbgen/*.c", format = "sdist" },
+  { path = "cbgen/*.h", format = "sdist" },
+  { path = "cbgen/*.pyd", format = "wheel" },
+  { path = "cbgen/*.so", format = "wheel" },
 ]
+
+[tool.poetry.dependencies]
+appdirs = "*"
+build = "*"
+cffi = "*"
+numpy = "*"
+pooch = "*"
+pytest = "*"
+python = "^3.8"
+toml = "^0.9"
+
+[tool.poetry.dev-dependencies]
+black = "*"
+isort = "*"
+pyright = "*"
+pytest = "*"
+
+[tool.poetry.build]
+script = "build_ext.py"
+generate-setup-file = false
+
+[tool.cibuildwheel]
+skip = "pp* *-win32 *_i686 *musllinux*"
+manylinux-x86_64-image = "manylinux2014"
+manylinux-aarch64-image = "manylinux2014"
+
+[tool.cibuildwheel.linux]
+before-all = "yum install -y libffi-devel"

@@ -2,141 +2,78 @@ name: Test, build, and deploy to PyPI
 
 on: [push, pull_request]
 
-env:
-  BGEN_EXTRA_LINK_ARGS: "-Wl,-rpath,/usr/local/lib"
-  CIBW_BEFORE_BUILD_LINUX: "{project}/ci/linux-deps"
-  CIBW_BEFORE_BUILD_MACOS: "{project}/ci/macos-deps"
-  CIBW_BEFORE_BUILD_WINDOWS: "bash {project}/ci/win-deps"
-  CIBW_TEST_COMMAND: "bash {project}/ci/test"
-  CIBW_SKIP: "pp* cp27-* cp34-* cp35-* cp36-*"
-  INCLUDE: "c:\\Program Files\\zstd\\include;c:\\Program Files\\zlib\\include;c:\\Program Files\\elapsed\\include;c:\\Program Files\\athr\\include;c:\\Program Files\\bgen\\include;c:\\Program Files (x86)\\zstd\\include;c:\\Program Files (x86)\\zlib\\include;c:\\Program Files (x86)\\elapsed\\include;c:\\Program Files (x86)\\athr\\include;c:\\Program Files (x86)\\bgen\\include"
-  LIB: "c:\\Program Files\\zstd\\lib;c:\\Program Files\\zlib\\lib;c:\\Program Files\\elapsed\\lib;c:\\Program Files\\athr\\lib;c:\\Program Files\\bgen\\lib;c:\\Program Files (x86)\\zstd\\lib;c:\\Program Files (x86)\\zlib\\lib;c:\\Program Files (x86)\\elapsed\\lib;c:\\Program Files (x86)\\athr\\lib;c:\\Program Files (x86)\\bgen\\lib"
-
 jobs:
   test:
     name: Test on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: [3.8]
+        os: [ubuntu-20.04, macos-11] # skips windows until poetry 1.2.0b3 or newer is released
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python-version }}
+      - uses: actions/checkout@v3
 
-      - name: Check for sudo
-        shell: bash
+      - name: Test it
         run: |
-          if type sudo >/dev/null 2>&1; then SUDO="sudo"; else SUDO=""; fi
-          echo "SUDO=$SUDO" >> $GITHUB_ENV
+          pipx install poetry==1.2.0b2
+          poetry install
+          poetry run pytest
 
-      - name: Set system version
-        if: matrix.os == 'windows-latest'
-        shell: bash
-        run: |
-          echo "CMAKE_SYSTEM_VERSION='10.0.19041.0'" >> $GITHUB_ENV
-          echo "CMAKE_GENERATOR_PLATFORM=x64" >>  $GITHUB_ENV
-
-      - name: Install zstd
-        shell: bash
-        run: $SUDO bash -c "$(curl -fsSL https://raw.githubusercontent.com/horta/zstd.install/main/install)"
-
-      - name: Install zlib
-        if: matrix.os == 'windows-latest'
-        run: powershell -Command "(New-Object Net.WebClient).DownloadFile('https://raw.githubusercontent.com/horta/zlib.install/master/install.bat', 'install.bat')"; ./install.bat
-
-      - name: Install elapsed
-        shell: bash
-        run: $SUDO bash -c "$(curl -fsSL https://git.io/Jz7Oa)" -s horta/elapsed
-
-      - name: Install almosthere
-        shell: bash
-        run: $SUDO bash -c "$(curl -fsSL https://git.io/Jz7Oa)" -s horta/almosthere
-
-      - name: Install bgen
-        shell: bash
-        run: $SUDO bash -c "$(curl -fsSL https://git.io/Jz7Oa)" -s limix/bgen
-
-      - name: Install python dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install flake8 pytest black isort
-          python setup.py build_ext --inplace && pip install . --use-feature=in-tree-build && pip uninstall "$(python setup.py --name)" --yes
-
-      - name: Copy DLLs
-        if: matrix.os == 'windows-latest'
-        shell: bash
-        run: |
-          cp "/c/Program Files/elapsed/bin/elapsed.dll" cbgen/
-          cp "/c/Program Files/athr/bin/athr.dll" cbgen/
-          cp "/c/Program Files/bgen/bin/bgen.dll" cbgen/
-          cp "/c/Program Files/zlib/bin/zlib.dll" cbgen/
-          cp "/c/Program Files/zstd/bin/zstd.dll" cbgen/
-
-      - name: Lint
-        run: |
-          flake8 .
-          black --check .
-          isort --check-only .
-
-      - name: Test
-        run: pytest .
-
-  build_wheels:
-    name: Build wheels on ${{ matrix.os }}
+  make_wheels:
+    name: Make wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-20.04, windows-2019, macos-10.15]
+        os: [ubuntu-20.04, macos-11]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - uses: actions/setup-python@v2
-        name: Install Python
+      - name: Set up QEMU
+        if: runner.os == 'Linux'
+        uses: docker/setup-qemu-action@v1
         with:
-          python-version: '3.8'
+          platforms: all
 
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.3.0
+        uses: pypa/cibuildwheel@v2.8.0
+        env:
+          CIBW_ARCHS_LINUX: "auto aarch64"
+          CIBW_ARCHS_MACOS: "universal2"
+          CIBW_PROJECT_REQUIRES_PYTHON: ">=3.8"
+          CIBW_TEST_COMMAND: "bash {project}/ci/test"
+          CIBW_TEST_SKIP: "*_arm64 *_universal2:arm64" # see https://cibuildwheel.readthedocs.io/en/stable/faq/#universal2
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
-          path: ./wheelhouse/*.whl
+          name: artifact
+          path: wheelhouse/*.whl
 
-  build_sdist:
-      name: Build source distribution
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v2
-
-        - uses: actions/setup-python@v2
-          name: Install Python
-          with:
-            python-version: '3.8'
-
-        - name: Build sdist
-          run: python setup.py sdist
-
-        - uses: actions/upload-artifact@v2
-          with:
-            path: dist/*.tar.gz
-
-  upload_pypi:
-    needs: [test, build_wheels, build_sdist]
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/')
+  make_sdist:
+    name: Make sdist
+    runs-on: ubuntu-20.04
     steps:
-      - uses: actions/download-artifact@v2
+      - uses: actions/checkout@v3
+
+      - name: Build sdist
+        run: pipx run build --sdist
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: artifact
+          path: dist/*.tar.gz
+
+  upload_all:
+    needs: [test, make_wheels, make_sdist]
+    runs-on: ubuntu-20.04
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - uses: actions/download-artifact@v3
         with:
           name: artifact
           path: dist
 
-      - uses: pypa/gh-action-pypi-publish@v1.4.2
+      - uses: pypa/gh-action-pypi-publish@v1.5.0
         with:
           user: __token__
           password: ${{ secrets.pypi_password }}

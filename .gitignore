@@ -1,4 +1,6 @@
-_version.py
+poetry.lock
+.ext_deps/
+cbgen/_ffi.c
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
