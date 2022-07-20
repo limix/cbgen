@@ -8,14 +8,14 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-20.04, macos-11] # skips windows until poetry 1.2.0b3 or newer is released
+        os: [ubuntu-20.04, macos-11, windows-2022]
 
     steps:
       - uses: actions/checkout@v3
 
       - name: Test it
         run: |
-          pipx install poetry==1.2.0b2
+          pipx install poetry==1.2.0b3
           poetry install
           poetry run pytest
 
@@ -24,7 +24,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-20.04, macos-11]
+        os: [ubuntu-20.04, macos-11, windows-2022]
 
     steps:
       - uses: actions/checkout@v3
