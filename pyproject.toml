@@ -14,7 +14,6 @@ homepage = "https://github.com/limix/cbgen"
 keywords = ["bgen", "reader", "genetics"]
 classifiers = ["License :: OSI Approved :: MIT License"]
 include = [
-  { path = "build_ext_deps", format = "sdist" },
   { path = "cbgen/*.c", format = "sdist" },
   { path = "cbgen/*.h", format = "sdist" },
   { path = "cbgen/*.pyd", format = "wheel" },
@@ -28,8 +27,7 @@ cffi = "*"
 numpy = "*"
 pooch = "*"
 pytest = "*"
-python = "^3.8"
-toml = "^0.9"
+python = ">=3.8"
 
 [tool.poetry.dev-dependencies]
 black = "*"
