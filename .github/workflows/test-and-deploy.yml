@@ -45,6 +45,7 @@ jobs:
           CIBW_PROJECT_REQUIRES_PYTHON: ">=3.8,<3.11"
           CIBW_TEST_COMMAND: "bash {project}/ci/test"
           CIBW_TEST_SKIP: "*_arm64"
+          CIBW_BEFORE_BUILD: "pip install cffi cmake --upgrade"
 
       - uses: actions/upload-artifact@v3
         with:
