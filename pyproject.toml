@@ -22,12 +22,11 @@ include = [
 
 [tool.poetry.dependencies]
 appdirs = "*"
-build = "*"
 cffi = "*"
 numpy = "*"
 pooch = "*"
 pytest = "*"
-python = ">=3.8"
+python = ">=3.8,<3.11"
 
 [tool.poetry.dev-dependencies]
 black = "*"
@@ -46,3 +45,6 @@ manylinux-aarch64-image = "manylinux2014"
 
 [tool.cibuildwheel.linux]
 before-all = "yum install -y libffi-devel"
+
+[tool.isort]
+profile = "black"
