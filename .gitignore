@@ -1,3 +1,4 @@
+*.o
 poetry.lock
 .ext_deps/
 cbgen/_ffi.c

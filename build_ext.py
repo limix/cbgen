@@ -7,20 +7,6 @@ import urllib.request
 from pathlib import Path
 from typing import List
 
-from cffi import FFI
-from cmake import CMAKE_BIN_DIR
-
-ffibuilder = FFI()
-
-libs = ["bgen", "athr", "elapsed"]
-
-if platform.system() == "Windows":
-    libs += ["zstd_static", "zlibstatic"]
-else:
-    libs += ["zstd", "z"]
-
-pwd = Path(os.path.dirname(os.path.abspath(__file__)))
-
 
 def rm(folder: Path, pattern: str):
     for filename in folder.glob(pattern):
@@ -28,6 +14,8 @@ def rm(folder: Path, pattern: str):
 
 
 def get_cmake_bin():
+    from cmake import CMAKE_BIN_DIR
+
     bins = [str(v) for v in Path(CMAKE_BIN_DIR).glob("cmake*")]
     return str(sorted(bins, key=lambda v: len(v))[0])
 
@@ -91,48 +79,66 @@ def build_deps(pwd: Path, user: str, project: str, version: str):
     return list(extra_libs)
 
 
-if not os.getenv("BGEN_SKIP_BUILD_DEPS", False):
-    libs += build_deps(pwd, "limix", "bgen", "4.1.9")
+def compile_extension():
 
-with open(pwd / "cbgen" / "interface.h", "r") as f:
-    ffibuilder.cdef(f.read())
+    from cffi import FFI
 
-with open(pwd / "cbgen" / "genotype.h", "r") as f:
-    ffibuilder.cdef(f.read())
+    ffibuilder = FFI()
 
-with open(pwd / "cbgen" / "genotype.c", "r") as f:
-    genotype_c = f.read()
+    libs = ["bgen", "athr", "elapsed"]
 
-with open(pwd / "cbgen" / "partition.h", "r") as f:
-    ffibuilder.cdef(f.read())
+    if platform.system() == "Windows":
+        libs += ["zstd_static", "zlibstatic"]
+    else:
+        libs += ["zstd", "z"]
 
-with open(pwd / "cbgen" / "partition.c", "r") as f:
-    partition_c = f.read()
+    pwd = Path(os.path.dirname(os.path.abspath(__file__)))
 
-with open(pwd / "cbgen" / "samples.h", "r") as f:
-    ffibuilder.cdef(f.read())
+    if not os.getenv("BGEN_SKIP_BUILD_DEPS", False):
+        libs += build_deps(pwd, "limix", "bgen", "4.1.9")
 
-with open(pwd / "cbgen" / "samples.c", "r") as f:
-    samples_c = f.read()
+    with open(pwd / "cbgen" / "interface.h", "r") as f:
+        ffibuilder.cdef(f.read())
 
-extra_link_args: List[str] = []
-if "BGEN_EXTRA_LINK_ARGS" in os.environ:
-    extra_link_args += os.environ["BGEN_EXTRA_LINK_ARGS"].split(os.pathsep)
+    with open(pwd / "cbgen" / "genotype.h", "r") as f:
+        ffibuilder.cdef(f.read())
 
-ffibuilder.set_source(
-    "cbgen._ffi",
-    rf"""
-    #include "bgen/bgen.h"
-    {genotype_c}
-    {partition_c}
-    {samples_c}
-    """,
-    libraries=libs,
-    extra_link_args=extra_link_args,
-    language="c",
-    library_dirs=[str(pwd / ".ext_deps" / "lib"), str(pwd / ".ext_deps" / "lib64")],
-    include_dirs=[str(pwd / ".ext_deps" / "include")],
-)
+    with open(pwd / "cbgen" / "genotype.c", "r") as f:
+        genotype_c = f.read()
+
+    with open(pwd / "cbgen" / "partition.h", "r") as f:
+        ffibuilder.cdef(f.read())
+
+    with open(pwd / "cbgen" / "partition.c", "r") as f:
+        partition_c = f.read()
+
+    with open(pwd / "cbgen" / "samples.h", "r") as f:
+        ffibuilder.cdef(f.read())
+
+    with open(pwd / "cbgen" / "samples.c", "r") as f:
+        samples_c = f.read()
+
+    extra_link_args: List[str] = []
+    if "BGEN_EXTRA_LINK_ARGS" in os.environ:
+        extra_link_args += os.environ["BGEN_EXTRA_LINK_ARGS"].split(os.pathsep)
+
+    ffibuilder.set_source(
+        "cbgen._ffi",
+        rf"""
+        #include "bgen/bgen.h"
+        {genotype_c}
+        {partition_c}
+        {samples_c}
+        """,
+        libraries=libs,
+        extra_link_args=extra_link_args,
+        language="c",
+        library_dirs=[str(pwd / ".ext_deps" / "lib"), str(pwd / ".ext_deps" / "lib64")],
+        include_dirs=[str(pwd / ".ext_deps" / "include")],
+    )
+
+    ffibuilder.compile(verbose=True)
+
 
 if __name__ == "__main__":
-    ffibuilder.compile(verbose=True)
+    compile_extension()
