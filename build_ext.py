@@ -2,6 +2,7 @@ import os
 import platform
 import shutil
 import subprocess
+import sys
 import tarfile
 import urllib.request
 from pathlib import Path
@@ -18,6 +19,18 @@ def get_cmake_bin():
 
     bins = [str(v) for v in Path(CMAKE_BIN_DIR).glob("cmake*")]
     return str(sorted(bins, key=lambda v: len(v))[0])
+
+
+def darwin_setup():
+    os.environ.setdefault("MACOSX_DEPLOYMENT_TARGET", "11.0")
+
+    machine = platform.machine()
+    # Set by setuptools/cibuildwheels
+    archflags = os.environ.get("ARCHFLAGS")
+    if archflags is not None:
+        machine = ";".join(set(archflags.split()) & {"x86_64", "arm64"})
+
+    os.environ.setdefault("CMAKE_OSX_ARCHITECTURES", machine)
 
 
 def build_deps(pwd: Path, user: str, project: str, version: str):
@@ -40,6 +53,9 @@ def build_deps(pwd: Path, user: str, project: str, version: str):
 
     with tarfile.open(ext_dir / tar_filename) as tf:
         tf.extractall(ext_dir)
+
+    if sys.platform == "darwin":
+        darwin_setup()
 
     cmake_bin = get_cmake_bin()
     subprocess.check_call(
