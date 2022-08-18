@@ -27,6 +27,7 @@ numpy = "*"
 pooch = "*"
 pytest = "*"
 python = ">=3.8,<3.11"
+urllib3 = ">=1.26"
 
 [tool.poetry.dev-dependencies]
 black = "*"
