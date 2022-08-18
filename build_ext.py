@@ -27,6 +27,11 @@ def rm(folder: Path, pattern: str):
         filename.unlink()
 
 
+def get_cmake_bin():
+    bins = [str(v) for v in Path(CMAKE_BIN_DIR).glob("cmake*")]
+    return str(sorted(bins, key=lambda v: len(v))[0])
+
+
 def build_deps(pwd: Path, user: str, project: str, version: str):
     ext_dir = pwd / ".ext_deps"
     shutil.rmtree(ext_dir, ignore_errors=True)
@@ -48,7 +53,7 @@ def build_deps(pwd: Path, user: str, project: str, version: str):
     with tarfile.open(ext_dir / tar_filename) as tf:
         tf.extractall(ext_dir)
 
-    cmake_bin = str(next(Path(CMAKE_BIN_DIR).glob("cmake*")))
+    cmake_bin = get_cmake_bin()
     subprocess.check_call(
         [
             cmake_bin,
