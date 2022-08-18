@@ -42,7 +42,7 @@ jobs:
         env:
           CIBW_ARCHS_LINUX: "auto aarch64"
           CIBW_ARCHS_MACOS: "x86_64 arm64"
-          CIBW_PROJECT_REQUIRES_PYTHON: ">=3.8"
+          CIBW_PROJECT_REQUIRES_PYTHON: ">=3.8,<3.11"
           CIBW_TEST_COMMAND: "bash {project}/ci/test"
           CIBW_TEST_SKIP: "*_arm64"
 
