@@ -1,32 +1,22 @@
-name: Test, build, and deploy to PyPI
+name: Build, test, and deploy to PyPI
 
 on: [push, pull_request]
 env:
   MACOSX_DEPLOYMENT_TARGET: 11.0
 
 jobs:
-  test:
-    name: Test on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-20.04, macos-11, windows-2022]
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Test it
-        run: |
-          pipx install poetry==1.2.0b3
-          poetry install
-          poetry run pytest
-
   make_wheels:
-    name: Make wheels on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-20.04, macos-11, windows-2022]
+        include:
+          - config: {"name": "Linux", "os": "ubuntu-20.04", "arch": "x86_64"}
+          - config: {"name": "Linux", "os": "ubuntu-20.04", "arch": "aarch64"}
+          - config: {"name": "macOS", "os": "macos-11", "arch": "x86_64"}
+          - config: {"name": "macOS", "os": "macos-11", "arch": "arm64"}
+          - config: {"name": "Windows", "os": "windows-2022", "arch": "AMD64"}
+
+    name: Make wheels for ${{ matrix.config.os }} ${{ matrix.config.arch }}
+    runs-on: ${{ matrix.config.os }}
 
     steps:
       - uses: actions/checkout@v3
@@ -38,14 +28,32 @@ jobs:
           platforms: all
 
       - name: Build wheels
+        if: matrix.config.name == 'Linux'
         uses: pypa/cibuildwheel@v2.9.0
         env:
-          CIBW_ARCHS_LINUX: "auto aarch64"
-          CIBW_ARCHS_MACOS: "x86_64 arm64"
+          CIBW_ARCHS_LINUX: ${{ matrix.config.arch }}
           CIBW_PROJECT_REQUIRES_PYTHON: ">=3.8,<3.11"
           CIBW_TEST_COMMAND: "bash {project}/ci/test"
-          CIBW_TEST_SKIP: "*_arm64"
-          CIBW_BEFORE_BUILD: "pip install cffi cmake --upgrade && python build_ext.py"
+          CIBW_BEFORE_BUILD: "python -m pip install cffi cmake --upgrade && python build_ext.py"
+          CIBW_BUILD_VERBOSITY: 1
+
+      - name: Build wheels
+        if: matrix.config.name == 'Windows'
+        uses: pypa/cibuildwheel@v2.9.0
+        env:
+          CIBW_PROJECT_REQUIRES_PYTHON: ">=3.8,<3.11"
+          CIBW_TEST_COMMAND: "bash {project}/ci/test"
+          CIBW_BEFORE_BUILD: "python -m pip install cffi cmake --upgrade && python build_ext.py"
+          CIBW_BUILD_VERBOSITY: 1
+
+      - name: Build wheels
+        if: matrix.config.name == 'macOS'
+        uses: pypa/cibuildwheel@v2.9.0
+        env:
+          CIBW_ARCHS_MACOS: ${{ matrix.config.arch }}
+          CIBW_PROJECT_REQUIRES_PYTHON: ">=3.8,<3.11"
+          CIBW_TEST_COMMAND: "bash {project}/ci/test"
+          CIBW_BEFORE_BUILD: "python -m pip install cffi cmake --upgrade && python build_ext.py"
           CIBW_BUILD_VERBOSITY: 1
 
       - uses: actions/upload-artifact@v3
@@ -68,7 +76,7 @@ jobs:
           path: dist/*.tar.gz
 
   upload_all:
-    needs: [test, make_wheels, make_sdist]
+    needs: [make_wheels, make_sdist]
     runs-on: ubuntu-20.04
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     steps:
