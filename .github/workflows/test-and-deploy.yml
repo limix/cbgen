@@ -1,6 +1,8 @@
 name: Test, build, and deploy to PyPI
 
 on: [push, pull_request]
+env:
+  MACOSX_DEPLOYMENT_TARGET: 11.0
 
 jobs:
   test:
