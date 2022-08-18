@@ -12,7 +12,6 @@ jobs:
           - config: {"name": "Linux", "os": "ubuntu-20.04", "arch": "x86_64"}
           - config: {"name": "Linux", "os": "ubuntu-20.04", "arch": "aarch64"}
           - config: {"name": "macOS", "os": "macos-11", "arch": "x86_64"}
-          - config: {"name": "macOS", "os": "macos-11", "arch": "arm64"}
           - config: {"name": "Windows", "os": "windows-2022", "arch": "AMD64"}
 
     name: Make wheels for ${{ matrix.config.os }} ${{ matrix.config.arch }}
