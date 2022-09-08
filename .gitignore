@@ -132,3 +132,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# vscode
+.vs/
+.vscode/
+runs/
+3.22.5
