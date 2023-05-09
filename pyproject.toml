@@ -26,7 +26,7 @@ cffi = "*"
 numpy = "*"
 pooch = "*"
 pytest = "*"
-python = ">=3.8,<3.11"
+python = ">=3.8"
 urllib3 = ">=1.26"
 
 [tool.poetry.dev-dependencies]

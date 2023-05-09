@@ -28,32 +28,33 @@ jobs:
 
       - name: Build wheels
         if: matrix.config.name == 'Linux'
-        uses: pypa/cibuildwheel@v2.9.0
+        uses: pypa/cibuildwheel@v2.12.3
         env:
           CIBW_ARCHS_LINUX: ${{ matrix.config.arch }}
-          CIBW_PROJECT_REQUIRES_PYTHON: ">=3.8,<3.11"
+          CIBW_PROJECT_REQUIRES_PYTHON: ">=3.8"
           CIBW_TEST_COMMAND: "bash {project}/ci/test"
           CIBW_BEFORE_BUILD: "python -m pip install cffi cmake --upgrade && python build_ext.py"
           CIBW_BUILD_VERBOSITY: 1
 
       - name: Build wheels
         if: matrix.config.name == 'Windows'
-        uses: pypa/cibuildwheel@v2.9.0
+        uses: pypa/cibuildwheel@v2.12.3
         env:
-          CIBW_PROJECT_REQUIRES_PYTHON: ">=3.8,<3.11"
+          CIBW_PROJECT_REQUIRES_PYTHON: ">=3.8"
           CIBW_TEST_COMMAND: "bash {project}/ci/test"
           CIBW_BEFORE_BUILD: "python -m pip install cffi cmake --upgrade && python build_ext.py"
           CIBW_BUILD_VERBOSITY: 1
 
       - name: Build wheels
         if: matrix.config.name == 'macOS'
-        uses: pypa/cibuildwheel@v2.9.0
+        uses: pypa/cibuildwheel@v2.12.3
         env:
           CIBW_ARCHS_MACOS: ${{ matrix.config.arch }}
-          CIBW_PROJECT_REQUIRES_PYTHON: ">=3.8,<3.11"
+          CIBW_PROJECT_REQUIRES_PYTHON: ">=3.8"
           CIBW_TEST_COMMAND: "bash {project}/ci/test"
           CIBW_BEFORE_BUILD: "python -m pip install cffi cmake --upgrade && python build_ext.py"
           CIBW_BUILD_VERBOSITY: 1
+          SYSTEM_VERSION_COMPAT: 0
 
       - uses: actions/upload-artifact@v3
         with:
