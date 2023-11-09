@@ -39,8 +39,5 @@ script = "build_ext.py"
 [tool.cibuildwheel]
 skip = "pp* *-win32 *_i686"
 
-[tool.cibuildwheel.linux]
-before-all = "yum install -y libffi-devel"
-
 [tool.pytest.ini_options]
 pythonpath = ["."]
