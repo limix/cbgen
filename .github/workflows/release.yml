@@ -25,6 +25,7 @@ jobs:
         include:
           - {os: macos-13, arch: x86_64, build: "*"}
           - {os: macos-14, arch: arm64, build: "*"}
+          - {os: windows-2022, arch: AMD64, build: "*"}
           - {os: ubuntu-latest, arch: x86_64, build: "*"}
           - {os: ubuntu-latest, arch: aarch64, build: "*9-manylinux*"}
           - {os: ubuntu-latest, arch: aarch64, build: "*0-manylinux*"}
