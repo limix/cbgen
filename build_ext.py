@@ -111,7 +111,7 @@ def compile_extension():
     pwd = Path(os.path.dirname(os.path.abspath(__file__)))
 
     if not os.getenv("BGEN_SKIP_BUILD_DEPS", False):
-        libs += build_deps(pwd, "limix", "bgen", "4.1.9")
+        libs += build_deps(pwd, "limix", "bgen", "4.1.10")
 
     with open(pwd / "cbgen" / "interface.h", "r") as f:
         ffibuilder.cdef(f.read())
