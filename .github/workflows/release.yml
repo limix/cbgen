@@ -47,16 +47,16 @@ jobs:
         with:
           path: wheelhouse/*.whl
 
-  # upload_all:
-  #   needs: [make_wheels, make_sdist]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/download-artifact@v3
-  #       with:
-  #         name: artifact
-  #         path: dist
-  #
-  #     - uses: pypa/gh-action-pypi-publish@release/v1
-  #       with:
-  #         password: ${{secrets.PYPI_API_TOKEN}}
-  #         skip-existing: true
+  upload_all:
+    needs: [make_wheels, make_sdist]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: artifact
+          path: dist
+
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{secrets.PYPI_API_TOKEN}}
+          skip-existing: true
