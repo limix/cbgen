@@ -24,7 +24,7 @@ jobs:
       matrix:
         include:
           - {os: macos-latest, arch: x86_64, build: "*"}
-          - {os: macos-latest, arch: arm64, build: "*"}
+          - {os: macos-14, arch: arm64, build: "*"}
           - {os: ubuntu-latest, arch: x86_64, build: "*"}
           - {os: ubuntu-latest, arch: aarch64, build: "*9-manylinux*"}
           - {os: ubuntu-latest, arch: aarch64, build: "*0-manylinux*"}
