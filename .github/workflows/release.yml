@@ -39,7 +39,7 @@ jobs:
           platforms: arm64
         if: matrix.os == 'ubuntu-latest'
       - name: Build wheels
-        run: pipx run cibuildwheel==2.16.2
+        run: pipx run cibuildwheel==2.19.1
         env:
           CIBW_ARCHS: ${{ matrix.arch }}
           CIBW_BUILD: ${{ matrix.build }}
