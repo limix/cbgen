@@ -39,7 +39,7 @@ def build_deps(pwd: Path, user: str, project: str, version: str):
         lf.write(data)
 
     with tarfile.open(ext_dir / tar_filename) as tf:
-        tf.extractall(ext_dir)
+        tf.extractall(ext_dir, filter="data")
 
     cmake_bin = get_cmake_bin()
     subprocess.check_call(

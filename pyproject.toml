@@ -23,11 +23,11 @@ include = [
 [tool.poetry.dependencies]
 appdirs = "*"
 cffi = "*"
-numpy = "*"
 pooch = "*"
 pytest = "*"
 python = "^3.9"
 urllib3 = ">=1.26"
+numpy = "^2.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7"
